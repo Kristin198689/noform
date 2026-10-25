@@ -1,0 +1,162 @@
+[
+  {
+    "file": "references/01-hero.png",
+    "role": "reference_only_do_not_embed_as_webpage",
+    "width": 1536,
+    "height": 1024,
+    "alpha": false,
+    "sha256": "0eeadd56d7db5eb24c21f199ab8d47d51517d7bd46090b7a25dc12cf5b827b33"
+  },
+  {
+    "file": "references/02-lookbook.png",
+    "role": "reference_only_do_not_embed_as_webpage",
+    "width": 1672,
+    "height": 941,
+    "alpha": false,
+    "sha256": "51c0b485eb6fa42bf7fb9f1c7ca9690557e584db8dd2219518995a8cceaf11f0"
+  },
+  {
+    "file": "references/03-about.png",
+    "role": "reference_only_do_not_embed_as_webpage",
+    "width": 1536,
+    "height": 1024,
+    "alpha": false,
+    "sha256": "299e874f0f659278ba9bcba948485c2f787b42bcdc2ac359d12872a124c3918b"
+  },
+  {
+    "file": "references/04-visor.png",
+    "role": "reference_only_do_not_embed_as_webpage",
+    "width": 1536,
+    "height": 1024,
+    "alpha": false,
+    "sha256": "4cab2c1fb9899812ed0ad4addb35e77e2e6622bfc2492ad0593f62ae2df9ce5a"
+  },
+  {
+    "file": "references/05-design-code.png",
+    "role": "reference_only_do_not_embed_as_webpage",
+    "width": 1536,
+    "height": 1024,
+    "alpha": false,
+    "sha256": "ec23cef7d7fda508b07f30669c56519f618e46aa1d210e047b0c3bb53982bbda"
+  },
+  {
+    "file": "references/06-scanner.png",
+    "role": "reference_only_do_not_embed_as_webpage",
+    "width": 1536,
+    "height": 1024,
+    "alpha": false,
+    "sha256": "ef31485df8b1c6fd0c6bfc2bb324ca1a1f3e76cc0cbe0531e21ae0ed2d95c64e"
+  },
+  {
+    "file": "references/07-form-lab.png",
+    "role": "reference_only_do_not_embed_as_webpage",
+    "width": 1536,
+    "height": 1024,
+    "alpha": false,
+    "sha256": "b83e84803b8caaf018e2df05fbc96eef42ecb038768547a1ab6aec3ffdef2588"
+  },
+  {
+    "file": "references/08-finale.png",
+    "role": "reference_only_do_not_embed_as_webpage",
+    "width": 1536,
+    "height": 1024,
+    "alpha": false,
+    "sha256": "77e8c85eb4b2db6782a77a5a1ce9dd9f2469e3482eb438ef4a493867ac1a0ad0"
+  },
+  {
+    "file": "assets/photos/hero-clean.png",
+    "role": "production_source",
+    "width": 1536,
+    "height": 1024,
+    "alpha": false,
+    "sha256": "cf0d9e1f8d3b468d0c459f62180a276543587e5bf805e99add677a15f7959636"
+  },
+  {
+    "file": "assets/photos/look-01-low-angle.png",
+    "role": "production_source",
+    "width": 1024,
+    "height": 1536,
+    "alpha": false,
+    "sha256": "153f66fc62ad77131ef93bda2a6161674cf262b55ca84d03e4504eeb0f5346c9"
+  },
+  {
+    "file": "assets/photos/look-02-back.png",
+    "role": "production_source",
+    "width": 1024,
+    "height": 1536,
+    "alpha": false,
+    "sha256": "e842ae0807242e474c34635f00ff04d329357e7a266543d5fcb4942a61fbda17"
+  },
+  {
+    "file": "assets/photos/look-03-overhead.png",
+    "role": "production_source",
+    "width": 1024,
+    "height": 1536,
+    "alpha": false,
+    "sha256": "431b6db50efc0d08c2a46ba67c9cc0cef180ecdd13137538649565a645b34820"
+  },
+  {
+    "file": "assets/photos/look-04-crouch.png",
+    "role": "production_source",
+    "width": 1536,
+    "height": 1024,
+    "alpha": false,
+    "sha256": "818b86140f874b08fee64d3f048980992621c7ab8024b6823c2f23829f2b2f1d"
+  },
+  {
+    "file": "assets/photos/look-05-stride.png",
+    "role": "production_source",
+    "width": 1536,
+    "height": 1024,
+    "alpha": false,
+    "sha256": "f8a3ead4b752d446993f80c2f6cc98b592acb30207d071c2d574e2c0c09e7566"
+  },
+  {
+    "file": "assets/photos/visor-front-clean.png",
+    "role": "production_source",
+    "width": 1536,
+    "height": 1024,
+    "alpha": false,
+    "sha256": "4e9bcaba60b51a72bc39b76e27e099a21db1c1c06669cfd910230e93f6490ad4"
+  },
+  {
+    "file": "assets/products/visor-angle-01.png",
+    "role": "production_source",
+    "width": 1536,
+    "height": 1024,
+    "alpha": true,
+    "sha256": "4d905001c204cb1feb2e56a9ced2610e50e5f9fce6e2704110c7920e68b71757"
+  },
+  {
+    "file": "assets/products/visor-angle-02.png",
+    "role": "production_source",
+    "width": 1536,
+    "height": 1024,
+    "alpha": true,
+    "sha256": "19e76a93ac317236c4cfc8bfbfb227721767a7f4f7414563ecf7ee2fe78ad4d8"
+  },
+  {
+    "file": "assets/products/visor-angle-03.png",
+    "role": "production_source",
+    "width": 1536,
+    "height": 1024,
+    "alpha": true,
+    "sha256": "ca596f3c7b600f276448a1c02c2b23807f7a5bea98f81477ba4a7e8877aae3e2"
+  },
+  {
+    "file": "assets/products/hoodie-cutout.png",
+    "role": "production_source",
+    "width": 1024,
+    "height": 1536,
+    "alpha": true,
+    "sha256": "0ae843e52aee55fc5691600395eaa88ca7cfa4f96c793b95dc8aadfecb404e7c"
+  },
+  {
+    "file": "assets/products/cargo-cutout.png",
+    "role": "production_source",
+    "width": 1024,
+    "height": 1536,
+    "alpha": true,
+    "sha256": "143f28a4b4ee03700da5fa673027adce8f91310c0d49630c2752ec5d69641b33"
+  }
+]

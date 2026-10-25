@@ -1,0 +1,17 @@
+[
+  {
+    "file": "fonts/golostext/GolosText-Variable.ttf",
+    "ukrainian_supported": true,
+    "german_supported": true
+  },
+  {
+    "file": "fonts/ibmplexmono/IBMPlexMono-Regular.ttf",
+    "ukrainian_supported": true,
+    "german_supported": true
+  },
+  {
+    "file": "fonts/museomoderno/MuseoModerno-Variable.ttf",
+    "ukrainian_supported": false,
+    "german_supported": true
+  }
+]

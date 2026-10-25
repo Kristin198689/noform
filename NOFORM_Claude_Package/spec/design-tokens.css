@@ -1,0 +1,11 @@
+/* Copy fonts/ to public/fonts; all font requests stay same-origin. */
+@font-face{font-family:MuseoModerno;src:url('/fonts/museomoderno/MuseoModerno-Variable.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:'Golos Text';src:url('/fonts/golostext/GolosText-Variable.woff2') format('woff2');font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('/fonts/ibmplexmono/IBMPlexMono-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+:root{--black:#080808;--white:#F6F5F2;--gray:#D9D9D6;--mid:#A0A0A0;--charcoal:#292A30;--pink:#FF168A;--taupe:#BAB5AA;--display:MuseoModerno,'Golos Text',sans-serif;--body:'Golos Text',sans-serif;--micro:'IBM Plex Mono',monospace}
+body{font-family:var(--body);font-weight:400}
+.display{font-family:var(--display);font-weight:700;line-height:1.02}
+:lang(uk) .display{font-family:'Golos Text',sans-serif;font-weight:800}
+.micro{font-family:var(--micro);font-size:clamp(.65rem,.75vw,.8rem);letter-spacing:.12em}
+.reading{font-size:clamp(1rem,1.2vw,1.2rem);line-height:1.6;letter-spacing:normal}
+/* Decorative labels may be smaller, meaningful controls must be legible. No remote CSS imports. */

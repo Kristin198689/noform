@@ -1,0 +1,32 @@
+{
+  "asset_count": 20,
+  "reference_count": 8,
+  "clean_photo_count": 7,
+  "transparent_product_count": 5,
+  "pdf_pages": 29,
+  "font_coverage": [
+    {
+      "file": "fonts/golostext/GolosText-Variable.ttf",
+      "ukrainian_supported": true,
+      "german_supported": true
+    },
+    {
+      "file": "fonts/ibmplexmono/IBMPlexMono-Regular.ttf",
+      "ukrainian_supported": true,
+      "german_supported": true
+    },
+    {
+      "file": "fonts/museomoderno/MuseoModerno-Variable.ttf",
+      "ukrainian_supported": false,
+      "german_supported": true
+    }
+  ],
+  "locale_key_count": 83,
+  "locales": [
+    "de",
+    "en",
+    "uk"
+  ],
+  "runtime_fonts_external": false,
+  "status": "handoff package, not implemented website"
+}
