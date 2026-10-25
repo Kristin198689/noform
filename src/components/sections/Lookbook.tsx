@@ -74,8 +74,8 @@ export function Lookbook({ t }: { t: Strings }) {
       const render = (angle: number) => {
         const w = window.innerWidth;
         const mobile = w < 768;
-        const rx = mobile ? w * 0.34 : Math.min(w * 0.33, 620);
-        const rz = mobile ? 300 : 560;
+        const rx = mobile ? w * 0.42 : Math.min(w * 0.38, 700);
+        const rz = mobile ? 340 : 720;
         const vh = window.innerHeight / 100;
         for (let i = 0; i < N; i++) {
           const el = els[i];
@@ -89,7 +89,7 @@ export function Lookbook({ t }: { t: Strings }) {
           const z = (c - 1) * rz;
           const y = item.y * vh * (mobile ? 0.5 : 1);
           const rot = -s * 28;
-          const hidden = mobile && c < -0.3;
+          const hidden = mobile && c < 0.05;
           el.style.transform = `translate(-50%, -50%) perspective(1400px) translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, ${z.toFixed(1)}px) rotateY(${rot.toFixed(2)}deg)`;
           el.style.opacity = hidden ? "0" : (0.22 + 0.78 * depth ** 1.4).toFixed(3);
           const zi = Math.round(depth * 100);
@@ -213,7 +213,7 @@ export function Lookbook({ t }: { t: Strings }) {
         lastZ = [];
       };
     },
-    { scope: root, dependencies: [mode, tick] },
+    { scope: root, dependencies: [mode, tick], revertOnUpdate: true },
   );
 
   const onKey = (e: React.KeyboardEvent) => {

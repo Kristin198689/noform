@@ -44,7 +44,7 @@ export function hoodie(volume: number): HoodieGeometry {
   const hemY = 818;
   const rib = 46;
 
-  const N: P = [CX + 76, 238];
+  const N: P = [CX + 84, 238];
   const q1: P = [CX + bw * 0.55, shY - 18];
   const ST: P = [CX + bw - 24, shY + drop * 0.1];
   const CO: P = [CX + bw + 96 + sv * 0.55, 766];
@@ -87,16 +87,16 @@ export function hoodie(volume: number): HoodieGeometry {
     "Z",
   ].join(" ");
 
-  const hw2 = lerp(150, 172);
+  const hw2 = lerp(178, 198);
   const hood = [
     `M${pt(mx(N))}`,
-    `C${f(CX - 76 - 44)} 182 ${f(CX - hw2)} 78 ${f(CX)} 66`,
-    `C${f(CX + hw2)} 78 ${f(CX + 76 + 44)} 182 ${pt(N)}`,
+    `C${f(CX - 84 - 58)} 170 ${f(CX - hw2)} 58 ${f(CX)} 44`,
+    `C${f(CX + hw2)} 58 ${f(CX + 84 + 58)} 170 ${pt(N)}`,
   ].join(" ");
   const hoodOpening = [
-    `M${f(CX - 60)} 252`,
-    `C${f(CX - 84)} 176 ${f(CX - 54)} 120 ${f(CX)} 116`,
-    `C${f(CX + 54)} 120 ${f(CX + 84)} 176 ${f(CX + 60)} 252`,
+    `M${f(CX - 66)} 254`,
+    `C${f(CX - 100)} 170 ${f(CX - 66)} 102 ${f(CX)} 98`,
+    `C${f(CX + 66)} 102 ${f(CX + 100)} 170 ${f(CX + 66)} 254`,
   ].join(" ");
 
   const seamTop: P = [ST[0] + 10 + drop * 0.32, ST[1] + 8 + drop * 0.55];

@@ -77,10 +77,16 @@
     min-height: 0;
     padding-block: 96px 72px;
   }
+  .code {
+    top: calc(var(--chrome-h) + 4px);
+  }
   .front {
     left: auto;
     right: var(--gutter);
-    top: 56px;
+    top: calc(var(--chrome-h) + 4px);
+  }
+  .pause {
+    padding-top: 120px;
   }
   .visorWrap {
     width: 92vw;

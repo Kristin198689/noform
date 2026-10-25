@@ -27,7 +27,6 @@ const PARTS = ["outline", "hood", "hoodOpening", "seams", "pocket", "ribs", "str
 type Part = (typeof PARTS)[number];
 
 const pad3 = (n: number) => String(Math.round(n)).padStart(3, "0");
-const pct = (n: number) => `${(n / 10).toFixed(2)}%`; // viewBox is 1000 × 1000
 
 export function FormLab({ t }: { t: Strings }) {
   const root = useRef<HTMLElement>(null);
@@ -39,7 +38,11 @@ export function FormLab({ t }: { t: Strings }) {
   const shoulderLabel = useRef<HTMLSpanElement>(null);
   const sleeveLabel = useRef<HTMLSpanElement>(null);
   const width = useRef<HTMLSpanElement>(null);
+  const tickL = useRef<HTMLSpanElement>(null);
+  const tickR = useRef<HTMLSpanElement>(null);
   const scaleMark = useRef<HTMLSpanElement>(null);
+  const figure = useRef<HTMLDivElement>(null);
+  const track = useRef<HTMLSpanElement>(null);
   const proxy = useRef({ v: START / 100, g: START / 100 });
   const reduced = useRef(false);
 
@@ -48,26 +51,33 @@ export function FormLab({ t }: { t: Strings }) {
     for (const part of PARTS) main.current[part]?.setAttribute("d", geo[part]);
     ghost.current?.setAttribute("d", hoodie(proxy.current.g).outline);
     const { shoulder, sleeve, hemLeft, hemRight } = geo.anchors;
+    // Composite-only: markers move with transforms in figure pixels (viewBox is square, 1000 units).
+    const k = (figure.current?.offsetWidth ?? 1000) / 1000;
     const place = (el: HTMLElement | null, [x, y]: [number, number]) => {
-      if (!el) return;
-      el.style.left = pct(x);
-      el.style.top = pct(y);
+      if (el) el.style.transform = `translate3d(${(x * k).toFixed(1)}px, ${(y * k).toFixed(1)}px, 0)`;
     };
-    place(shoulderMark.current, shoulder);
+    // Shoulder is read on the left side of the garment, sleeve volume on the right.
+    const leftShoulder: [number, number] = [1000 - shoulder[0], shoulder[1]];
+    place(shoulderMark.current, leftShoulder);
     place(sleeveMark.current, sleeve);
-    place(shoulderLabel.current, [shoulder[0] - 150, shoulder[1] - 70]);
-    place(sleeveLabel.current, [sleeve[0] + 20, sleeve[1] - 30]);
+    place(shoulderLabel.current, [leftShoulder[0] - 34, leftShoulder[1] - 46]);
+    place(sleeveLabel.current, [sleeve[0] + 24, sleeve[1] - 10]);
     if (width.current) {
-      width.current.style.left = pct(hemLeft[0]);
-      width.current.style.width = pct(hemRight[0] - hemLeft[0]);
+      width.current.style.transform = `translateX(${(hemLeft[0] * k).toFixed(1)}px) scaleX(${((hemRight[0] - hemLeft[0]) / 1000).toFixed(4)})`;
     }
-    if (scaleMark.current) scaleMark.current.style.bottom = `calc(${(proxy.current.v * 100).toFixed(2)}% - 3px)`;
+    place(tickL.current, [hemLeft[0], 905]);
+    place(tickR.current, [hemRight[0], 905]);
+    const trackH = track.current?.offsetHeight ?? 0;
+    if (scaleMark.current) scaleMark.current.style.transform = `translateY(${(-proxy.current.v * trackH).toFixed(1)}px)`;
   }, []);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     reduced.current = mq.matches;
     draw();
+    const ro = new ResizeObserver(() => draw());
+    if (figure.current) ro.observe(figure.current);
+    return () => ro.disconnect();
   }, [draw]);
 
   // Smooth follow; a faint previous contour lags behind (off for reduced motion).
@@ -113,7 +123,11 @@ export function FormLab({ t }: { t: Strings }) {
       <div className={styles.layout}>
         <div className={styles.intro}>
           <h2 id="lab-title" className={`display ${styles.heading}`}>
-            {t["lab.heading"]}
+            {(t["lab.heading"].match(/[^.]+\.?/g) ?? [t["lab.heading"]]).map((line) => (
+              <span key={line} className={styles.headingLine}>
+                {line.trim()}
+              </span>
+            ))}
           </h2>
           <p className={styles.description}>{t["lab.description"]}</p>
           <p className={`micro ${styles.studyCodes}`} aria-hidden="true">
@@ -141,7 +155,7 @@ export function FormLab({ t }: { t: Strings }) {
         </div>
 
         <div className={styles.figureCol}>
-          <div className={styles.figure} data-figure>
+          <div ref={figure} className={styles.figure} data-figure>
             <span className={styles.axis} aria-hidden="true" />
             <span className={styles.guideH} style={{ top: "26.2%" }} data-lab-guide aria-hidden="true" />
             <span className={styles.guideH} style={{ top: "81.8%" }} data-lab-guide aria-hidden="true" />
@@ -180,8 +194,11 @@ export function FormLab({ t }: { t: Strings }) {
             <span ref={sleeveLabel} className={`micro ${styles.tag}`} data-lab-mark>
               {t["lab.sleeve"]}
             </span>
-            <span ref={width} className={styles.width} data-lab-mark>
-              <span className={`micro ${styles.widthLabel}`}>{t["lab.silhouette"]}</span>
+            <span ref={width} className={styles.width} data-lab-mark aria-hidden="true" />
+            <span ref={tickL} className={styles.tick} data-lab-mark aria-hidden="true" />
+            <span ref={tickR} className={styles.tick} data-lab-mark aria-hidden="true" />
+            <span className={`micro ${styles.widthLabel}`} data-lab-mark>
+              {t["lab.silhouette"]}
             </span>
           </div>
 
@@ -191,7 +208,7 @@ export function FormLab({ t }: { t: Strings }) {
                 {n} —
               </span>
             ))}
-            <span className={styles.scaleTrack}>
+            <span ref={track} className={styles.scaleTrack}>
               <span ref={scaleMark} className={styles.scaleMark} />
             </span>
           </div>

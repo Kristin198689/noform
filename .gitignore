@@ -25,3 +25,6 @@ next-env.d.ts
 # test output
 playwright-report/
 test-results/
+
+# local QA screenshots
+qa-report/

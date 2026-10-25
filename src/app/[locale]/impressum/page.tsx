@@ -11,10 +11,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: `NØFORM — ${t["legal.imprint"]}`,
     robots: { index: false, follow: true },
-    alternates: {
-      canonical: `/${locale}/impressum`,
-      languages: { de: "/de/impressum", en: "/en/impressum", uk: "/uk/impressum", "x-default": "/de/impressum" },
-    },
+    // noindex placeholder: kept out of the hreflang cluster until the real legal page exists
+    alternates: { canonical: `/${locale}/impressum` },
   };
 }
 

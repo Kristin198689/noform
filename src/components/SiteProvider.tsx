@@ -67,22 +67,34 @@ export function SiteProvider({ children }: { children: React.ReactNode }) {
     return () => io.disconnect();
   }, []);
 
-  // After pins are measured (fonts + images), re-land on the hash target.
+  // Pins are measured late (fonts, glyph boxes), which moves sections down.
+  // Until the reader interacts, keep re-landing on the hash target after every refresh.
   useEffect(() => {
-    let done = false;
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (!id) return;
+    let settled = false;
+    const stop = () => {
+      settled = true;
+    };
     const land = () => {
-      if (done) return;
-      const id = decodeURIComponent(window.location.hash.slice(1));
-      if (!id) return;
-      const el = document.getElementById(id);
-      if (!el) return;
-      done = true;
-      el.scrollIntoView({ block: "start", behavior: "instant" });
+      if (settled) return;
+      document.getElementById(id)?.scrollIntoView({ block: "start", behavior: "instant" });
     };
     const onRefresh = () => requestAnimationFrame(land);
+    const opts = { once: true, passive: true } as const;
+    window.addEventListener("wheel", stop, opts);
+    window.addEventListener("touchstart", stop, opts);
+    window.addEventListener("keydown", stop, opts);
+    const timer = window.setTimeout(stop, 5000);
     ScrollTrigger.addEventListener("refresh", onRefresh);
     void document.fonts.ready.then(() => ScrollTrigger.refresh());
-    return () => ScrollTrigger.removeEventListener("refresh", onRefresh);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("wheel", stop);
+      window.removeEventListener("touchstart", stop);
+      window.removeEventListener("keydown", stop);
+      ScrollTrigger.removeEventListener("refresh", onRefresh);
+    };
   }, []);
 
   const value = useMemo(() => ({ soundOn, toggleSound, tick, section }), [soundOn, toggleSound, tick, section]);

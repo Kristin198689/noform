@@ -95,7 +95,7 @@
 .titleBlock {
   position: absolute;
   left: 50%;
-  top: 66%;
+  top: 60.5%;
   translate: -50% 0;
   display: flex;
   flex-direction: column;
@@ -112,7 +112,7 @@
   margin: 0;
   font-family: var(--font-museo), sans-serif;
   font-weight: 800;
-  font-size: 13.6cqw;
+  font-size: 12.4cqw;
   line-height: 0.86;
   letter-spacing: 0.01em;
   white-space: nowrap;
@@ -196,7 +196,11 @@
   display: none;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px), (max-aspect-ratio: 1/1) {
+  .section {
+    top: var(--chrome-h);
+    height: 32px;
+  }
   .wide {
     display: none;
   }
@@ -206,7 +210,7 @@
   .stage {
     height: auto;
     min-height: 0;
-    padding-top: var(--chrome-h);
+    padding-top: calc(var(--chrome-h) + 32px);
     padding-bottom: 72px;
   }
   .canvas {
@@ -229,7 +233,7 @@
     letter-spacing: 0.12em;
   }
   .title {
-    font-size: 14.4cqw;
+    font-size: 17vw;
   }
   .titleBlock {
     width: 58%;

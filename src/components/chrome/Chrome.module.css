@@ -93,6 +93,19 @@
   background: currentColor;
 }
 
+/* Phones: the bottom edge belongs to the sections, so the toggle sits in the free top-left corner. */
+@media (max-width: 767px) {
+  .sound {
+    top: 0;
+    bottom: auto;
+    left: var(--gutter);
+    right: auto;
+    height: var(--chrome-h);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+}
+
 @media (max-width: 479px) {
   .top {
     gap: 6px;

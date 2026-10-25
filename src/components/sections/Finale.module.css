@@ -164,6 +164,11 @@
 }
 
 @media (max-width: 767px) {
+  .top {
+    margin-top: var(--chrome-h);
+    height: 32px;
+    padding-left: 0;
+  }
   .markCodes span:nth-child(2) {
     display: none;
   }

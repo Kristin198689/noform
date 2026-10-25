@@ -11,10 +11,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: `NØFORM — ${t["legal.privacy"]}`,
     robots: { index: false, follow: true },
-    alternates: {
-      canonical: `/${locale}/datenschutz`,
-      languages: { de: "/de/datenschutz", en: "/en/datenschutz", uk: "/uk/datenschutz", "x-default": "/de/datenschutz" },
-    },
+    // noindex placeholder: kept out of the hreflang cluster until the real legal page exists
+    alternates: { canonical: `/${locale}/datenschutz` },
   };
 }
 

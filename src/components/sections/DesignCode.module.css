@@ -27,8 +27,8 @@
 /* ---------- wordmark construction ---------- */
 .markWrap {
   position: relative;
-  margin: clamp(36px, 6vh, 72px) clamp(0px, 2vw, 40px) 0;
-  padding: 5.2% 5.5%;
+  margin: clamp(20px, 4vh, 48px) 0 0;
+  padding: 4.4% 6%;
   color: var(--white);
 }
 .markWrap :global(.cross) {
@@ -92,16 +92,12 @@
   white-space: nowrap;
 }
 .cCap {
-  left: -0.5%;
-  top: calc(5.2% + 6px);
-  translate: -100% 0;
-  margin-left: -10px;
+  left: 0.6%;
+  top: calc(5.2% + 8px);
 }
 .cBase {
-  left: -0.5%;
-  bottom: calc(5.2% + 6px);
-  translate: -100% 0;
-  margin-left: -10px;
+  left: 0.6%;
+  bottom: calc(5.2% + 8px);
 }
 .cR1 {
   left: 9%;
@@ -120,17 +116,15 @@
   top: 30%;
 }
 .cUnit {
-  right: -1%;
-  top: 50%;
-  translate: 100% -50%;
-  margin-left: 10px;
+  right: 0.6%;
+  top: calc(50% + 8px);
 }
 
 /* ---------- three studies ---------- */
 .studies {
   display: grid;
   grid-template-columns: 1fr;
-  margin-top: clamp(40px, 6vh, 64px);
+  margin-top: clamp(24px, 4vh, 48px);
   border-top: 1px solid var(--line-on-black);
   border-bottom: 1px solid var(--line-on-black);
 }
@@ -144,6 +138,7 @@
 }
 .studyHead {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: baseline;
   gap: 16px;
@@ -162,15 +157,16 @@
 
 .figure {
   position: relative;
-  height: clamp(220px, 30vw, 360px);
-  margin-top: 20px;
-  display: grid;
-  place-items: center;
+  height: clamp(200px, 26vw, 300px);
+  margin-top: 16px;
 }
 
-.hoodie {
-  height: 100%;
-  width: auto;
+.hoodie,
+.letter {
+  position: absolute;
+  inset: 4% 26% 4% 0;
+  width: 74%;
+  height: 92%;
   overflow: visible;
 }
 .hoodie path,
@@ -222,6 +218,9 @@
   vector-effect: non-scaling-stroke;
 }
 .visor {
+  position: absolute;
+  left: 9%;
+  top: 34%;
   width: 82%;
   height: auto;
   color: var(--white);
@@ -245,9 +244,9 @@
 }
 
 .letter {
-  height: 88%;
-  width: auto;
-  overflow: visible;
+  inset: 8% 18%;
+  width: 64%;
+  height: 84%;
 }
 .construct {
   fill: none;
@@ -295,7 +294,7 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  object-position: 50% 30%;
+  object-position: 50% 42%;
 }
 .thumb figcaption {
   margin-top: 12px;
@@ -324,7 +323,9 @@
 
 @media (max-width: 767px) {
   .bar {
-    margin-right: 170px;
+    margin-right: 0;
+    margin-top: var(--chrome-h);
+    height: 32px;
   }
   .cCap,
   .cBase,

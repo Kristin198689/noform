@@ -28,9 +28,9 @@ const POINTERS = [
 ] as const;
 // Phones crop the sides of the portrait, so the leaders turn inwards.
 const POINTERS_NARROW = [
-  { key: "visor.shield", dot: [408, 283], path: "M408 283 L392 372 L470 372", label: [478, 372], align: "start" },
-  { key: "visor.temples", dot: [1119, 283], path: "M1119 283 L1140 372 L1062 372", label: [1054, 372], align: "end" },
-  { key: "visor.curve", dot: [965, 172], path: "M965 172 L1010 96 L940 96", label: [932, 96], align: "end" },
+  { key: "visor.shield", dot: [408, 283], path: "M408 283 L396 352", label: [360, 380], align: "start" },
+  { key: "visor.temples", dot: [1119, 283], path: "M1119 283 L1150 418", label: [1196, 446], align: "end" },
+  { key: "visor.curve", dot: [965, 172], path: "M965 172 L1010 98", label: [1196, 76], align: "end" },
 ] as const;
 
 const V_LINES = [430, 768, 1105];

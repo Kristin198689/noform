@@ -39,20 +39,30 @@
 }
 
 .words {
+  /* three cap-height-equal words, set apart at different positions */
+  --word-h: min(calc((100svh - var(--chrome-h) - 190px) / 3.25), 17vw);
   position: relative;
   display: flex;
   flex-direction: column;
   gap: clamp(8px, 1.6vh, 20px);
-  margin-inline: auto;
   width: 100%;
-  max-width: min(100%, 165svh);
 }
 
 .word {
   display: block;
-  width: 100%;
-  height: auto;
+  height: var(--word-h);
+  width: auto;
+  max-width: 100%;
   overflow: visible;
+}
+.word:nth-of-type(1) {
+  align-self: flex-start;
+}
+.word:nth-of-type(2) {
+  align-self: flex-end;
+}
+.word:nth-of-type(3) {
+  align-self: center;
 }
 
 .glyphs {
@@ -171,7 +181,12 @@
     min-height: 100svh;
     justify-content: center;
   }
+  .title {
+    top: var(--chrome-h);
+    height: 32px;
+  }
   .words {
+    --word-h: 18.5vw;
     gap: 6px;
   }
   .codes span:nth-child(2),

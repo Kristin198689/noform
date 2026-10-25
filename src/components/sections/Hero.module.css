@@ -202,7 +202,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px), (max-aspect-ratio: 1/1) {
   .hero {
     min-height: 620px;
   }
@@ -265,6 +265,9 @@
   }
   .right {
     margin-right: 0 !important;
+  }
+  .under p {
+    white-space: normal;
   }
   .collection {
     gap: 14px;

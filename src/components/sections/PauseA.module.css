@@ -86,9 +86,15 @@
     min-height: 0;
     padding-block: 96px 88px;
   }
+  .code {
+    top: calc(var(--chrome-h) + 4px);
+  }
   .independent {
-    top: 48px;
+    top: calc(var(--chrome-h) + 24px);
     bottom: auto;
+  }
+  .pause {
+    padding-top: 128px;
   }
   .grid {
     background-size: calc((100% - 2 * var(--gutter)) / 4) 25%;

@@ -36,9 +36,17 @@
 
 .heading {
   margin: 0;
-  font-size: clamp(2.4rem, 1.2rem + 3.8vw, 4.6rem);
-  line-height: 0.98;
-  max-width: 7.6em;
+  font-size: clamp(2.1rem, 1rem + 3.2vw, 3.9rem);
+  line-height: 1;
+}
+.headingLine {
+  display: block;
+  white-space: nowrap;
+}
+@media (max-width: 419px) {
+  .headingLine {
+    white-space: normal;
+  }
 }
 .description {
   margin: 18px 0 0;
@@ -152,6 +160,8 @@
 
 .ring {
   position: absolute;
+  left: 0;
+  top: 0;
   width: 12px;
   height: 12px;
   translate: -50% -50%;
@@ -162,6 +172,8 @@
 
 .tag {
   position: absolute;
+  left: 0;
+  top: 0;
   translate: -100% -50%;
   padding-right: 8px;
   font-size: 11px;
@@ -175,29 +187,26 @@
 
 .width {
   position: absolute;
+  left: 0;
   top: 90.5%;
+  width: 100%;
   height: 1px;
   background: var(--black);
+  transform-origin: left center;
 }
-.width::before,
-.width::after {
-  content: "";
+.tick {
   position: absolute;
-  top: -4px;
+  left: 0;
+  top: 0;
   width: 1px;
   height: 9px;
+  translate: 0 -50%;
   background: var(--black);
-}
-.width::before {
-  left: 0;
-}
-.width::after {
-  right: 0;
 }
 .widthLabel {
   position: absolute;
   left: 50%;
-  top: 0;
+  top: 90.5%;
   translate: -50% -50%;
   padding-inline: 12px;
   background: var(--gray);
@@ -225,7 +234,7 @@
 .scaleMark {
   position: absolute;
   left: -3px;
-  bottom: 0;
+  bottom: -3px;
   width: 7px;
   height: 7px;
   border-radius: 50%;
@@ -344,7 +353,16 @@
 
 @media (max-width: 767px) {
   .bar {
-    margin-right: 170px;
+    margin-right: 0;
+    margin-top: var(--chrome-h);
+    height: 32px;
+  }
+  .tag {
+    translate: -18% -170% !important;
+    padding: 0 !important;
+  }
+  .tag + .tag {
+    translate: -82% 90% !important;
   }
   .note {
     margin-right: 0;
@@ -365,9 +383,9 @@
 
 @media (min-width: 1000px) {
   .layout {
-    grid-template-columns: minmax(260px, 0.9fr) minmax(0, 2.3fr);
-    gap: clamp(24px, 3vw, 56px);
-    padding-top: clamp(32px, 6vh, 72px);
+    grid-template-columns: minmax(320px, 1.1fr) minmax(0, 2.2fr);
+    gap: clamp(16px, 2vw, 40px);
+    padding-top: clamp(20px, 4vh, 48px);
   }
   .studyCodes,
   .construction,
@@ -387,6 +405,6 @@
     display: block;
   }
   .figure {
-    width: min(100%, 74svh);
+    width: min(100%, 66svh);
   }
 }

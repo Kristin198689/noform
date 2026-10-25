@@ -17,8 +17,8 @@ type Box = { x: number; y: number; w: number; h: number };
 
 // Fragments of our own photographs, seen only through the letterforms.
 const FILLS: { media: MediaId; scale: number; focus: [number, number] }[] = [
-  { media: "look-04", scale: 1.25, focus: [0.46, 0.42] }, // VOLUME — hoodie folds and silhouette
-  { media: "visor-front", scale: 1.55, focus: [0.5, 0.3] }, // CURVE — mirrored visor and face
+  { media: "look-04", scale: 2.1, focus: [0.6, 0.3] }, // VOLUME — hoodie folds and silhouette
+  { media: "visor-front", scale: 1.3, focus: [0.5, 0.36] }, // CURVE — mirrored visor and face
   { media: "look-01", scale: 1.35, focus: [0.42, 0.62] }, // TEXTURE — washed cargo denim
 ];
 
@@ -89,7 +89,10 @@ export function Scanner({ t, locale }: { t: Strings; locale: string }) {
           const box = boxes[i];
           if (!box) return;
           const r = svg.getBoundingClientRect();
-          const local = r.height ? ((lineY - r.top) / r.height) * (box.h + PAD * 2) + (box.y - PAD) : 0;
+          const vbH = box.h + PAD * 2;
+          const scale = Math.min(r.width / box.w, r.height / vbH) || 1;
+          const offsetY = (r.height - vbH * scale) / 2;
+          const local = (lineY - r.top - offsetY) / scale + (box.y - PAD);
           const top = box.y - PAD;
           const h = Math.max(0, Math.min(box.h + PAD * 2, local - top));
           svg.querySelector("[data-scan-rect]")?.setAttribute("height", h.toFixed(2));
@@ -118,7 +121,7 @@ export function Scanner({ t, locale }: { t: Strings; locale: string }) {
         onRefresh: (self) => apply(gsap.utils.clamp(0, 1, self.progress * 1.12 - 0.04)),
       });
     },
-    { scope: root, dependencies: [boxes, mode] },
+    { scope: root, dependencies: [boxes, mode], revertOnUpdate: true },
   );
 
   const scanned = mode === "list";
