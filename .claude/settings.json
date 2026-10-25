@@ -1,0 +1,9 @@
+{
+  "skillOverrides": {
+    "ui-ux-pro-max": "off",
+    "design-taste-frontend": "off",
+    "marketingskills-copywriting": "off",
+    "marketingskills-cro": "off",
+    "marketingskills-psychology": "off"
+  }
+}

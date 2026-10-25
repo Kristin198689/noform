@@ -1,0 +1,215 @@
+/* NØFORM tokens — from NOFORM_Claude_Package/spec/design-tokens.css. Fonts are loaded by next/font/local. */
+:root {
+  --black: #080808;
+  --white: #f6f5f2;
+  --gray: #d9d9d6;
+  --mid: #a0a0a0;
+  --charcoal: #292a30;
+  --pink: #ff168a;
+  --taupe: #bab5aa;
+
+  --display: var(--font-museo), var(--font-golos), sans-serif;
+  --body: var(--font-golos), system-ui, sans-serif;
+  --micro: var(--font-plex), ui-monospace, monospace;
+
+  /* 1 CSS px guides: white on black 0.12–0.22, black on gray 0.12–0.2 */
+  --line-on-black: rgb(246 245 242 / 0.16);
+  --line-on-black-strong: rgb(246 245 242 / 0.32);
+  --line-on-gray: rgb(8 8 8 / 0.16);
+  --line-on-gray-strong: rgb(8 8 8 / 0.34);
+
+  --gutter: 16px;
+  --micro-size: 11px;
+  --micro-track: 0.14em;
+  --chrome-h: 56px;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  color-scheme: dark;
+}
+
+@media (min-width: 400px) {
+  :root { --gutter: 20px; }
+}
+@media (min-width: 768px) {
+  :root { --gutter: 24px; --micro-size: 11.5px; }
+}
+@media (min-width: 1200px) {
+  :root { --gutter: clamp(40px, 3.4vw, 64px); --micro-size: 12px; }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--black);
+  /* Index jumps land instantly; scenes are not replayed with smooth scrolling. */
+  scroll-behavior: auto;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: clip;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--pink);
+  color: var(--white);
+}
+
+/* Typography roles */
+.display {
+  font-family: var(--display);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+}
+:lang(uk) .display {
+  font-family: var(--body);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+
+.micro {
+  font-family: var(--micro);
+  font-size: var(--micro-size);
+  line-height: 1.5;
+  letter-spacing: var(--micro-track);
+  text-transform: uppercase;
+}
+
+/* Purely decorative codes: may be smaller, always aria-hidden. */
+.deco {
+  font-family: var(--micro);
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: var(--micro-track);
+  text-transform: uppercase;
+}
+
+.reading {
+  font-size: clamp(1rem, 0.94rem + 0.3vw, 1.2rem);
+  line-height: 1.6;
+}
+
+.pink {
+  color: var(--pink);
+}
+
+.capsule {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35em 1em 0.3em;
+  border: 1px solid var(--pink);
+  border-radius: 999px;
+  color: var(--pink);
+  font-family: var(--micro);
+  font-size: var(--micro-size);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  left: var(--gutter);
+  top: 12px;
+  z-index: 100;
+  padding: 10px 16px;
+  background: var(--white);
+  color: var(--black);
+  font-family: var(--micro);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform 200ms var(--ease-out);
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* Crosshair "+" registration mark */
+.cross {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+.cross::before,
+.cross::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+.cross::before {
+  left: 7px;
+  top: 0;
+  width: 1px;
+  height: 100%;
+}
+.cross::after {
+  top: 7px;
+  left: 0;
+  height: 1px;
+  width: 100%;
+}
+
+html.menu-open {
+  overflow: hidden;
+}

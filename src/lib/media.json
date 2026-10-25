@@ -1,0 +1,122 @@
+{
+  "hero": {
+    "width": 1536,
+    "height": 1024,
+    "alpha": false,
+    "widths": [
+      480,
+      960,
+      1536
+    ]
+  },
+  "look-01": {
+    "width": 1024,
+    "height": 1536,
+    "alpha": false,
+    "widths": [
+      480,
+      960,
+      1024
+    ]
+  },
+  "look-02": {
+    "width": 1024,
+    "height": 1536,
+    "alpha": false,
+    "widths": [
+      480,
+      960,
+      1024
+    ]
+  },
+  "look-03": {
+    "width": 1024,
+    "height": 1536,
+    "alpha": false,
+    "widths": [
+      480,
+      960,
+      1024
+    ]
+  },
+  "look-04": {
+    "width": 1536,
+    "height": 1024,
+    "alpha": false,
+    "widths": [
+      480,
+      960,
+      1536
+    ]
+  },
+  "look-05": {
+    "width": 1536,
+    "height": 1024,
+    "alpha": false,
+    "widths": [
+      480,
+      960,
+      1536
+    ]
+  },
+  "visor-front": {
+    "width": 1536,
+    "height": 1024,
+    "alpha": false,
+    "widths": [
+      480,
+      960,
+      1536
+    ]
+  },
+  "visor-01": {
+    "width": 1536,
+    "height": 1024,
+    "alpha": true,
+    "widths": [
+      480,
+      960,
+      1536
+    ]
+  },
+  "visor-02": {
+    "width": 1536,
+    "height": 1024,
+    "alpha": true,
+    "widths": [
+      480,
+      960,
+      1536
+    ]
+  },
+  "visor-03": {
+    "width": 1536,
+    "height": 1024,
+    "alpha": true,
+    "widths": [
+      480,
+      960,
+      1536
+    ]
+  },
+  "hoodie": {
+    "width": 1024,
+    "height": 1536,
+    "alpha": true,
+    "widths": [
+      480,
+      960,
+      1024
+    ]
+  },
+  "cargo": {
+    "width": 1024,
+    "height": 1536,
+    "alpha": true,
+    "widths": [
+      480,
+      960,
+      1024
+    ]
+  }
+}

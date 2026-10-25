@@ -1,0 +1,256 @@
+.visor {
+  position: relative;
+  background: #111;
+  color: var(--white);
+}
+
+.stage {
+  position: relative;
+  height: 100svh;
+  min-height: 600px;
+  overflow: hidden;
+}
+
+/* The canvas keeps the photo's 3:2 ratio and covers the viewport,
+   so every guide, pointer and caption stays registered to the visor. */
+.canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100%, 150svh);
+  aspect-ratio: 3 / 2;
+  translate: -50% -50%;
+  container-type: inline-size;
+  transform-origin: 50% 32%;
+  will-change: transform;
+}
+
+.photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
+  color: rgb(246 245 242 / 0.55);
+  pointer-events: none;
+}
+.v,
+.h {
+  position: absolute;
+  background: rgb(246 245 242 / 0.2);
+}
+.v {
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  transform-origin: top;
+}
+.h {
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform-origin: left;
+}
+
+.pointers {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.pointers path {
+  fill: none;
+  stroke: var(--white);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.pointers circle {
+  fill: var(--white);
+}
+
+.labels {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.label {
+  position: absolute;
+  translate: 0 -50%;
+  font-size: clamp(11px, 0.78cqw, 13px);
+  letter-spacing: 0.24em;
+  white-space: nowrap;
+  text-shadow: 0 0 10px rgb(0 0 0 / 0.35);
+}
+.label[data-align="end"] {
+  translate: -100% -50%;
+}
+
+.titleBlock {
+  position: absolute;
+  left: 50%;
+  top: 66%;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70%;
+}
+.badge {
+  align-self: flex-end;
+  margin-right: 3%;
+  font-size: clamp(11px, 0.72cqw, 12px);
+  margin-bottom: 0.8cqw;
+}
+.title {
+  margin: 0;
+  font-family: var(--font-museo), sans-serif;
+  font-weight: 800;
+  font-size: 13.6cqw;
+  line-height: 0.86;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.material {
+  margin: 2.4cqw 0 0;
+  font-size: clamp(11px, 0.78cqw, 13px);
+  letter-spacing: 0.24em;
+  white-space: nowrap;
+}
+
+.statement {
+  position: absolute;
+  left: var(--gutter);
+  top: 57%;
+  max-width: min(24vw, 340px);
+}
+.statementHead {
+  margin: 0;
+  font-size: clamp(11px, 0.9vw, 14px);
+  letter-spacing: 0.24em;
+}
+.statementRule {
+  display: block;
+  width: 32px;
+  height: 1px;
+  margin: 16px 0;
+  background: var(--white);
+}
+.statementMicro {
+  margin: 0;
+  max-width: 26em;
+  line-height: 1.8;
+}
+
+.vertical {
+  position: absolute;
+  right: 3.4%;
+  top: 54%;
+  margin: 0;
+  writing-mode: vertical-rl;
+  white-space: nowrap;
+  font-size: clamp(9.5px, 0.6cqw, 11px);
+  letter-spacing: 0.3em;
+}
+
+.section {
+  position: absolute;
+  left: var(--gutter);
+  top: 0;
+  height: var(--chrome-h);
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.bottom {
+  position: absolute;
+  left: var(--gutter);
+  right: calc(var(--gutter) + 150px);
+  bottom: max(20px, env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.bottom span {
+  white-space: nowrap;
+}
+.bottomRule {
+  flex: 1;
+  height: 1px;
+  background: rgb(246 245 242 / 0.4);
+}
+.bottomMark {
+  font-family: var(--font-museo), sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.narrow {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .wide {
+    display: none;
+  }
+  .narrow {
+    display: block;
+  }
+  .stage {
+    height: auto;
+    min-height: 0;
+    padding-top: var(--chrome-h);
+    padding-bottom: 72px;
+  }
+  .canvas {
+    position: relative;
+    left: 50%;
+    top: auto;
+    width: 172vw;
+    translate: -50% 0;
+  }
+  .statement {
+    position: static;
+    max-width: none;
+    padding: 28px var(--gutter) 0;
+  }
+  .vertical {
+    display: none;
+  }
+  .label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+  .title {
+    font-size: 14.4cqw;
+  }
+  .titleBlock {
+    width: 58%;
+    top: 63%;
+  }
+  .badge {
+    font-size: 11px;
+  }
+  .material {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    white-space: normal;
+    text-align: center;
+  }
+  .bottom {
+    right: var(--gutter);
+    bottom: 24px;
+    gap: 12px;
+  }
+  .bottomMark,
+  .bottomRule:last-child {
+    display: none;
+  }
+}

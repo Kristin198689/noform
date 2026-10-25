@@ -1,0 +1,88 @@
+.pause {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(28px, 5vh, 56px);
+  min-height: 54svh;
+  padding: 96px var(--gutter) 80px;
+  background: #050505;
+  color: var(--white);
+  overflow: hidden;
+}
+
+.guides span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--line-on-black);
+}
+.pause :global(.cross) {
+  color: var(--line-on-black-strong);
+}
+
+.code,
+.front {
+  position: absolute;
+  top: 32px;
+  margin: 0;
+  color: var(--mid);
+}
+.code {
+  left: var(--gutter);
+}
+.front {
+  left: calc(50% + 14px);
+}
+
+.visorWrap {
+  position: relative;
+  width: min(76vw, 880px);
+}
+.visor {
+  width: 100%;
+  height: auto;
+  color: var(--white);
+}
+.dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--pink);
+  translate: -50% -50%;
+}
+.curve {
+  position: absolute;
+  right: 0;
+  top: -1.6em;
+  margin: 0;
+  color: var(--mid);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.8rem, 0.9rem + 3.4vw, 4.4rem);
+  text-align: center;
+  text-wrap: balance;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 767px) {
+  .pause {
+    min-height: 0;
+    padding-block: 96px 72px;
+  }
+  .front {
+    left: auto;
+    right: var(--gutter);
+    top: 56px;
+  }
+  .visorWrap {
+    width: 92vw;
+  }
+}
