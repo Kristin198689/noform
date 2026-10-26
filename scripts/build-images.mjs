@@ -1,6 +1,6 @@
 // Builds web derivatives (AVIF + WebP) from the PNG masters in the handoff package.
 // Masters stay untouched; alpha is preserved for product cut-outs.
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
@@ -22,13 +22,17 @@ const SOURCES = [
   ["visor-03", "products/visor-angle-03.png"],
   ["hoodie", "products/hoodie-cutout.png"],
   ["cargo", "products/cargo-cutout.png"],
+  ["beyond-portrait", "photos/Чорно-білий портрет у сріблястому візорі.png"], // BEYOND THE FRAME, frame 01
+  ["beyond-glass", "photos/Монохромна мода крізь скляну підлогу.png"], // BEYOND THE FRAME, frame 02
 ];
 const WIDTHS = [480, 960, 1536];
 
+// `npm run images -- id1 id2` rebuilds only those ids and keeps the rest of the manifest
+const only = process.argv.slice(2);
 await mkdir(OUT, { recursive: true });
-const manifest = {};
+const manifest = only.length ? JSON.parse(await readFile(MANIFEST, "utf8")) : {};
 
-for (const [id, rel] of SOURCES) {
+for (const [id, rel] of SOURCES.filter(([id]) => !only.length || only.includes(id))) {
   const input = sharp(path.join(SRC, rel));
   const { width, height, hasAlpha } = await input.metadata();
   const widths = [...WIDTHS.filter((w) => w < width), width];

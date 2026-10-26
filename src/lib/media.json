@@ -125,5 +125,27 @@
       960,
       1024
     ]
+  },
+  "beyond-portrait": {
+    "width": 1068,
+    "height": 1472,
+    "alpha": false,
+    "widths": [
+      480,
+      960,
+      1068
+    ],
+    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAADQBACdASoUABwAPu1gqE4ppaQiN/VYATAdiWkAACvwN1ddgRUk6V2hE4+TExmUAAD90jyYeOWufZ1l23bvYxx29IM72tRh0hrYjHe8lFFOoJzmOQJfwp8+zgJep1EAAAA="
+  },
+  "beyond-glass": {
+    "width": 1254,
+    "height": 1254,
+    "alpha": false,
+    "widths": [
+      480,
+      960,
+      1254
+    ],
+    "lqip": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAABwBACdASoUABQAPvVoq1AqpaOisBgIAVAeiWkAAB8SuNaar2YC6RkWvgxYAACgqgmYGF6hY12rb2sDn34ch3n1PW0X0v+3HbsjZaU8dBmFuWd8G4+2gAAA"
   }
 }

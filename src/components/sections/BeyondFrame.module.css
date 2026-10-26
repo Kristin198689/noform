@@ -1,0 +1,327 @@
+/* BEYOND THE FRAME — one shared image plane per photograph, cut into vertical panels.
+   Frame 01 keeps the portrait's own ratio, frame 02 is square: neither is stretched or cropped. */
+.scene {
+  --ra: calc(1068 / 1472);
+  --ha: min(76svh, calc(84vw / var(--ra)));
+  --wa: calc(var(--ha) * var(--ra));
+  --sb: min(76svh, 84vw);
+  --n: 7;
+  --fwa: calc(var(--wa) / var(--n));
+  --fwb: calc(var(--sb) / var(--n));
+  position: relative;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  background: var(--black);
+  color: var(--white);
+}
+@media (max-width: 767px) {
+  .scene {
+    --ha: min(66svh, calc(88vw / var(--ra)));
+    --sb: min(66svh, 88vw);
+    --n: 5;
+  }
+}
+
+.guide {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line-on-black);
+}
+
+.label,
+.labelR,
+.foot,
+.footR {
+  position: absolute;
+  z-index: 5;
+  margin: 0;
+  white-space: nowrap;
+}
+.label {
+  left: var(--gutter);
+  top: calc(var(--chrome-h) + 12px);
+  display: grid; /* both frame captions share one cell, so the box fits the longer one */
+}
+.label > span {
+  grid-area: 1 / 1;
+}
+.f2 {
+  opacity: 0;
+}
+.labelR {
+  right: var(--gutter);
+  top: calc(var(--chrome-h) + 12px);
+  color: var(--pink);
+}
+.foot {
+  left: var(--gutter);
+  bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.track {
+  position: relative;
+  width: min(220px, 34vw);
+  height: 1px;
+  background: var(--line-on-black-strong);
+}
+.bar {
+  position: absolute;
+  inset: 0;
+  background: var(--pink);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.tickMark {
+  position: absolute;
+  top: -3px;
+  width: 1px;
+  height: 7px;
+  background: var(--line-on-black-strong);
+}
+.footR {
+  right: var(--gutter);
+  bottom: 28px;
+  color: rgb(246 245 242 / 0.6);
+}
+@media (max-width: 767px) {
+  .footR {
+    right: auto;
+    left: var(--gutter);
+    bottom: 52px;
+  }
+}
+
+/* the stage: centre of both frames, perspective for the panels */
+.stage {
+  position: absolute;
+  left: 50%;
+  top: 51%;
+  width: 0;
+  height: 0;
+  perspective: 1500px;
+}
+@media (max-width: 767px) {
+  .stage {
+    perspective: 950px;
+  }
+}
+
+/* the whole photographs: flat, pixel-true, shown in the assembled states */
+.whole {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}
+.wholeA {
+  width: var(--wa);
+  height: var(--ha);
+  margin: calc(var(--ha) / -2) 0 0 calc(var(--wa) / -2);
+}
+.wholeB {
+  width: var(--sb);
+  height: var(--sb);
+  margin: calc(var(--sb) / -2) 0 0 calc(var(--sb) / -2);
+  visibility: hidden;
+}
+.whole img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+}
+/* thin frame line with corner ticks, drawn around each assembled photograph */
+.mark {
+  position: absolute;
+  inset: -14px;
+  border: 1px solid rgb(246 245 242 / 0.16);
+  pointer-events: none;
+}
+.mark::before,
+.mark::after {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-color: rgb(246 245 242 / 0.6);
+  border-style: solid;
+}
+.mark::before {
+  left: -1px;
+  top: -1px;
+  border-width: 1px 0 0 1px;
+}
+.mark::after {
+  right: -1px;
+  bottom: -1px;
+  border-width: 0 1px 1px 0;
+}
+.wholeB .mark {
+  opacity: 0;
+}
+
+.world {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+  z-index: 1;
+}
+
+.word {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  color: var(--pink);
+  font-size: clamp(3rem, 7.2vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+}
+@media (max-width: 767px) {
+  .word {
+    font-size: 21vw;
+    text-align: center;
+  }
+  .word span {
+    display: block;
+  }
+}
+
+.panels {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+  visibility: hidden;
+}
+.slot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+}
+@media (max-width: 767px) {
+  .slot:nth-child(n + 6) {
+    display: none;
+  }
+}
+.num {
+  position: absolute;
+  left: 0;
+  top: calc(var(--ha) / -2 - 26px);
+  translate: -50% 0;
+  color: rgb(246 245 242 / 0.7);
+  opacity: 0;
+}
+.spin {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+}
+.face {
+  position: absolute;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.faceA {
+  width: var(--fwa);
+  height: var(--ha);
+  left: calc(var(--fwa) / -2);
+  top: calc(var(--ha) / -2);
+}
+.faceB {
+  width: var(--fwb);
+  height: var(--sb);
+  left: calc(var(--fwb) / -2);
+  top: calc(var(--sb) / -2);
+  transform: rotateY(180deg); /* the back reads the right way round once the panel has turned */
+}
+.face img {
+  position: absolute;
+  top: 0;
+  display: block;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+}
+.faceA img {
+  width: var(--wa);
+  left: calc(var(--i) * var(--fwa) * -1);
+}
+.faceB img {
+  width: var(--sb);
+  left: calc(var(--i) * var(--fwb) * -1);
+}
+
+/* reduced motion and no-JS: both photographs side by side with the line between them */
+.scene[data-mode="list"] {
+  height: auto;
+  min-height: 0;
+  padding: calc(var(--chrome-h) + 64px) var(--gutter) 96px;
+}
+.scene[data-mode="list"] .stage {
+  position: relative;
+  left: auto;
+  top: auto;
+  width: auto;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  perspective: none;
+}
+.scene[data-mode="list"] .whole {
+  position: relative;
+  margin: 0;
+  visibility: visible;
+  max-width: 100%;
+}
+.scene[data-mode="list"] .wholeA {
+  width: min(var(--wa), 100%);
+  height: auto;
+  aspect-ratio: 1068 / 1472;
+}
+.scene[data-mode="list"] .wholeB {
+  width: min(var(--sb), 100%);
+  height: auto;
+  aspect-ratio: 1;
+}
+.scene[data-mode="list"] .wholeB .mark {
+  opacity: 1;
+}
+.scene[data-mode="list"] .world {
+  position: static;
+  order: 1;
+  flex-basis: 100%;
+}
+.scene[data-mode="list"] .word {
+  position: static;
+  opacity: 1;
+  text-align: center;
+  white-space: normal;
+}
+.scene[data-mode="list"] .panels,
+.scene[data-mode="list"] .f2 {
+  display: none;
+}
+.scene[data-mode="list"] .label,
+.scene[data-mode="list"] .labelR,
+.scene[data-mode="list"] .foot,
+.scene[data-mode="list"] .footR {
+  display: none;
+}

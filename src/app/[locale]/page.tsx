@@ -14,6 +14,7 @@ import { DesignCode } from "@/components/sections/DesignCode";
 import { Scanner } from "@/components/sections/Scanner";
 import { FormLab } from "@/components/sections/FormLab";
 import { Finale } from "@/components/sections/Finale";
+import { BeyondFrame } from "@/components/sections/BeyondFrame";
 import { LettersRing } from "@/components/studies/LettersRing";
 import { HelixArchive } from "@/components/studies/HelixArchive";
 import { SphereLooks } from "@/components/studies/SphereLooks";
@@ -122,7 +123,8 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             "lab.assembled",
           ])}
         />
-        {/* Review stage: four candidate scenes, to be placed between sections after review. */}
+        {/* Review stage: candidate scenes, to be placed between sections after review. */}
+        <BeyondFrame t={pick(t, ["alt.portrait", "alt.glass"])} />
         <LettersRing />
         <HelixArchive />
         <SphereLooks />
