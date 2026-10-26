@@ -20,6 +20,8 @@ const csp = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  // the root layout lives under [locale], so unmatched URLs get one trilingual 404 (app/global-not-found.tsx)
+  experimental: { globalNotFound: true },
   async redirects() {
     return [{ source: "/", destination: "/de", permanent: false }];
   },

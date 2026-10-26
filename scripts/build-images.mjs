@@ -50,3 +50,28 @@ for (const [id, rel] of SOURCES.filter(([id]) => !only.length || only.includes(i
 }
 
 await writeFile(MANIFEST, JSON.stringify(manifest, null, 2) + "\n");
+
+// Social preview: JPG 1200 × 630 (what every platform shows reliably), the hero cropped to the face,
+// a soft shade on the left and the approved wordmark (the real path, no font rendering).
+if (!only.length || only.includes("og")) {
+  const wordmark = await readFile(path.join(SRC, "noform-wordmark.svg"), "utf8");
+  const d = wordmark.match(/\sd="([^"]+)"/)?.[1];
+  if (!d) throw new Error("wordmark path not found");
+  const [W, H] = [1200, 630];
+  const overlay = Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
+      <defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0.45" stop-color="#080808" stop-opacity="0"/>
+        <stop offset="1" stop-color="#080808" stop-opacity="0.78"/>
+      </linearGradient></defs>
+      <rect width="${W}" height="${H}" fill="url(#s)"/>
+      <svg x="64" y="452" width="560" height="${Math.round((560 * 756) / 4697)}" viewBox="40 222 4697 756"><path d="${d}" fill="#f6f5f2"/></svg>
+    </svg>`,
+  );
+  await sharp(path.join(SRC, "photos/hero-clean.png"))
+    .resize({ width: W, height: H, fit: "cover", position: "attention" })
+    .composite([{ input: overlay }])
+    .jpeg({ quality: 84, mozjpeg: true })
+    .toFile(path.join(OUT, "og-1200x630.jpg"));
+  console.log("og: 1200x630 jpg");
+}

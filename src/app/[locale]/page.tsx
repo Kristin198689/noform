@@ -21,6 +21,7 @@ import { SphereLooks } from "@/components/studies/SphereLooks";
 import { DepthFlight } from "@/components/studies/DepthFlight";
 import { isLocale } from "@/i18n/config";
 import { getMessages, pick } from "@/i18n/messages";
+import { conceptJsonLd } from "@/lib/schema";
 
 // Order from the brief: 01 HERO → pause A → 02 → 03 → pause B → 04 → 05 → 06 → 07 → 08,
 // with the letters ring after the hero, the depth flight between 02 and 03 and the helix archive between 03 and pause B.
@@ -31,6 +32,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 
   return (
     <SiteProvider>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: conceptJsonLd(locale) }} />
       <a className="skip-link" href="#content">
         {t["ui.skip"]}
       </a>
@@ -53,7 +55,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       />
       <main id="content" tabIndex={-1}>
         <Hero t={pick(t, ["hero.tagline", "hero.independent", "hero.collection", "hero.left", "hero.start", "hero.right", "alt.hero"])} />
-        <LettersRing />
+        <LettersRing t={pick(t, ["study1.label", "study1.caption", "study.hintTurn"])} />
         <PauseA t={pick(t, ["pauseA.title", "pauseA.caption", "hero.independent"])} />
         <Lookbook
           t={pick(t, [
@@ -71,11 +73,11 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             "alt.stride",
           ])}
         />
-        <DepthFlight />
+        <DepthFlight t={pick(t, ["study4.label", "study4.hint", "study4.foot", "study4.depth"])} />
         <About
           t={pick(t, ["about.title", "about.eyebrow", "about.p1", "about.p2", "about.p3", "about.disclaimer", "hero.tagline", "alt.low"])}
         />
-        <HelixArchive />
+        <HelixArchive t={pick(t, ["study2.label", "study2.hint", "study2.foot", "study2.frame", "study2.mosaic"])} />
         <PauseB t={pick(t, ["pauseB.title"])} />
         <Visor
           t={pick(t, [
@@ -142,7 +144,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             "beyond.stage5",
           ])}
         />
-        <SphereLooks />
+        <SphereLooks t={pick(t, ["study3.label", "study3.foot", "study3.yaw", "study3.collapsed", "study.hintTurn"])} />
         <Finale
           locale={locale}
           t={pick(t, ["end.heading", "end.subtitle", "end.concept", "end.credit", "end.fiction", "ui.top", "legal.imprint", "legal.privacy"])}

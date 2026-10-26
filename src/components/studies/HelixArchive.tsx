@@ -6,6 +6,7 @@ import { attachDrag, clamp01, GALLERY, lerp, onceAbove, smooth, useScrollScene, 
 import { useMotionMode } from "@/lib/useMotionMode";
 import { cue } from "@/lib/sound";
 import { WORDMARK_PATH } from "@/lib/wordmark";
+import type { Messages } from "@/i18n/messages";
 import styles from "./Studies.module.css";
 
 const TILES = 140;
@@ -33,7 +34,11 @@ function mosaicCells(target: number): { x: number; y: number; size: number }[] {
  * Study 02 — Helix archive. Square tiles of the campaign hang on a 3D helix; the camera rises along it
  * (scroll), the helix turns (drag adds), then the tiles fly in a wave into a mosaic of the wordmark.
  */
-export function HelixArchive() {
+export function HelixArchive({
+  t,
+}: {
+  t: Pick<Messages, "study2.label" | "study2.hint" | "study2.foot" | "study2.frame" | "study2.mosaic">;
+}) {
   const mode = useMotionMode();
 
   const root = useScrollScene(mode === "ring", 5.4, (el) => {
@@ -113,21 +118,21 @@ export function HelixArchive() {
         mark.style.transform = `scale(${lerp(1.04, 1, legible).toFixed(4)})`;
         mark.style.width = `${(WORD.w * k).toFixed(1)}px`;
       }
-      if (readout) readout.textContent = u > 0.6 ? "MOSAIC / NØFORM" : `FRAME ${String((Math.max(0, st) % TILES) + 1).padStart(3, "0")}`;
+      if (readout) readout.textContent = u > 0.6 ? t["study2.mosaic"] : `${t["study2.frame"]} ${String((Math.max(0, st) % TILES) + 1).padStart(3, "0")}`;
     };
     return { render, dispose };
   });
 
   return (
-    <section ref={root} id="study-helix" data-section data-theme="dark" className={styles.scene} data-mode={mode} aria-label="Study 02 — helix archive">
+    <section ref={root} id="study-helix" data-section data-theme="dark" className={styles.scene} data-mode={mode} aria-label={t["study2.label"]}>
       <span className={styles.guide} style={{ top: "18%" }} aria-hidden="true" />
       <span className={styles.guide} style={{ top: "86%" }} aria-hidden="true" />
-      <p className={`micro ${styles.label}`} aria-hidden="true">STUDY 02 / HELIX ARCHIVE</p>
+      <p className={`micro ${styles.label}`} aria-hidden="true">{t["study2.label"]}</p>
       <p className={`micro ${styles.labelR}`} aria-hidden="true">
-        <span data-readout>FRAME 001</span>
+        <span data-readout>{t["study2.frame"]} 001</span>
       </p>
-      <p className={`micro ${styles.foot}`} aria-hidden="true">SCROLL TO RISE · DRAG TO TURN</p>
-      <p className={`micro ${styles.footR}`} aria-hidden="true">ARCHIVE / 2026</p>
+      <p className={`micro ${styles.foot}`} aria-hidden="true">{t["study2.hint"]}</p>
+      <p className={`micro ${styles.footR}`} aria-hidden="true">{t["study2.foot"]}</p>
       <div className={styles.stage}>
         {Array.from({ length: TILES }, (_, i) => {
           const id = GALLERY[i % GALLERY.length]!;

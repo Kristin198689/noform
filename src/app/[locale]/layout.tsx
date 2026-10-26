@@ -41,9 +41,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       description,
       locale: { de: "de_DE", en: "en_GB", uk: "uk_UA" }[locale],
       url: `/${locale}`,
-      images: [{ url: "/media/hero-1536.webp", width: 1536, height: 1024, alt: t["alt.hero"] }],
+      images: [{ url: "/media/og-1200x630.jpg", width: 1200, height: 630, type: "image/jpeg", alt: t["alt.hero"] }],
     },
-    twitter: { card: "summary_large_image", title, description, images: ["/media/hero-1536.webp"] },
+    twitter: { card: "summary_large_image", title, description, images: ["/media/og-1200x630.jpg"] },
     icons: { icon: "/icon.svg" },
   };
 }

@@ -7,6 +7,7 @@ import { attachDrag, GALLERY, GLYPHS, GLYPH_Y, lerp, onceAbove, smooth, useScrol
 import { useMotionMode } from "@/lib/useMotionMode";
 import { cue } from "@/lib/sound";
 import { WORDMARK_PATH } from "@/lib/wordmark";
+import type { Messages } from "@/i18n/messages";
 import styles from "./Studies.module.css";
 
 const PAD = 18;
@@ -17,7 +18,7 @@ const STEP = 360 / N;
  * Study 01 — Letters ring. The six letters of the wordmark stand on a carousel ring, each a window onto
  * a campaign photograph. Scroll turns the ring once (drag adds), then the letters unfold into the wordmark.
  */
-export function LettersRing() {
+export function LettersRing({ t }: { t: Pick<Messages, "study1.label" | "study1.caption" | "study.hintTurn"> }) {
   const mode = useMotionMode();
   const [near, setNear] = useState(false);
 
@@ -92,16 +93,16 @@ export function LettersRing() {
   }, [root]);
 
   return (
-    <section ref={root} id="study-ring" data-section data-theme="dark" className={styles.scene} data-mode={mode} aria-label="Study 01 — letters ring">
+    <section ref={root} id="study-ring" data-section data-theme="dark" className={styles.scene} data-mode={mode} aria-label={t["study1.label"]}>
       <span className={styles.guide} style={{ top: "28%" }} aria-hidden="true" />
       <span className={styles.guide} style={{ top: "76%" }} aria-hidden="true" />
-      <p className={`micro ${styles.label}`} aria-hidden="true">STUDY 01 / LETTERS RING</p>
+      <p className={`micro ${styles.label}`} aria-hidden="true">{t["study1.label"]}</p>
       <p className={`micro ${styles.labelR}`} aria-hidden="true">
         <span data-readout>N / 01</span>
       </p>
-      <p className={`micro ${styles.foot}`} aria-hidden="true">SCROLL TO TURN · DRAG TO SPIN</p>
+      <p className={`micro ${styles.foot}`} aria-hidden="true">{t["study.hintTurn"]}</p>
       <p className={`micro ${styles.footR}`} data-caption aria-hidden="true" style={{ opacity: 0 }}>
-        SIX LETTERS / ONE FORM
+        {t["study1.caption"]}
       </p>
 
       <div className={styles.stage}>

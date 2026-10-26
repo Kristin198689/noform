@@ -5,6 +5,7 @@ import { Wordmark } from "@/components/Wordmark";
 import { clamp01, GALLERY, onceAbove, smooth, useScrollScene } from "@/lib/studies";
 import { useMotionMode } from "@/lib/useMotionMode";
 import { cue } from "@/lib/sound";
+import type { Messages } from "@/i18n/messages";
 import styles from "./Studies.module.css";
 
 const FRAMES = 22;
@@ -21,7 +22,7 @@ const END = FRAMES + 0.6;
  * Study 04 — Flight through frames. Campaign photographs at increasing depth; the camera flies between
  * them (real perspective), near frames sweep past the edges, then the wordmark arrives from the depth.
  */
-export function DepthFlight() {
+export function DepthFlight({ t }: { t: Pick<Messages, "study4.label" | "study4.hint" | "study4.foot" | "study4.depth"> }) {
   const mode = useMotionMode();
 
   const root = useScrollScene(mode === "ring", 3.4, (el) => {
@@ -78,7 +79,7 @@ export function DepthFlight() {
         mark.style.transform = `translate3d(${(lean.x * 0.3).toFixed(1)}px, ${(lean.y * 0.3).toFixed(1)}px, 0) scale(${s.toFixed(4)})`;
         mark.style.opacity = smooth((p - 0.55) / 0.25).toFixed(3);
       }
-      if (readout) readout.textContent = `DEPTH ${String(Math.min(FRAMES, count + 1)).padStart(2, "0")} / ${FRAMES}`;
+      if (readout) readout.textContent = `${t["study4.depth"]} ${String(Math.min(FRAMES, count + 1)).padStart(2, "0")} / ${FRAMES}`;
     };
     // keep the cursor lean easing even when the scroll is still
     const idle = window.setInterval(() => {
@@ -94,13 +95,13 @@ export function DepthFlight() {
   });
 
   return (
-    <section ref={root} id="study-depth" data-section data-theme="dark" className={styles.scene} data-mode={mode} aria-label="Study 04 — flight through frames">
-      <p className={`micro ${styles.label}`} aria-hidden="true">STUDY 04 / FLIGHT THROUGH FRAMES</p>
+    <section ref={root} id="study-depth" data-section data-theme="dark" className={styles.scene} data-mode={mode} aria-label={t["study4.label"]}>
+      <p className={`micro ${styles.label}`} aria-hidden="true">{t["study4.label"]}</p>
       <p className={`micro ${styles.labelR}`} aria-hidden="true">
-        <span data-readout>DEPTH 01 / 14</span>
+        <span data-readout>{t["study4.depth"]} 01 / 22</span>
       </p>
-      <p className={`micro ${styles.foot}`} aria-hidden="true">SCROLL TO FLY</p>
-      <p className={`micro ${styles.footR}`} aria-hidden="true">CAMPAIGN / 2026</p>
+      <p className={`micro ${styles.foot}`} aria-hidden="true">{t["study4.hint"]}</p>
+      <p className={`micro ${styles.footR}`} aria-hidden="true">{t["study4.foot"]}</p>
       <div className={styles.stage}>
         {Array.from({ length: FRAMES }, (_, i) => {
           const id = GALLERY[(i * 2 + 1) % GALLERY.length]!;

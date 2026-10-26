@@ -4,6 +4,7 @@ import { Img } from "@/components/Img";
 import { attachDrag, clamp01, GALLERY, lerp, onceAbove, smooth, useScrollScene } from "@/lib/studies";
 import { useMotionMode } from "@/lib/useMotionMode";
 import { cue } from "@/lib/sound";
+import type { Messages } from "@/i18n/messages";
 import styles from "./Studies.module.css";
 
 const TILES = 40;
@@ -30,7 +31,11 @@ const OSLASH = Array.from({ length: TILES }, (_, i) => {
  * Study 03 — Sphere of looks. Campaign tiles on a 3D sphere: scroll turns it, drag spins it,
  * near tiles are large and bright, far ones small and dim; the sphere then collapses into Ø.
  */
-export function SphereLooks() {
+export function SphereLooks({
+  t,
+}: {
+  t: Pick<Messages, "study3.label" | "study3.foot" | "study3.yaw" | "study3.collapsed" | "study.hintTurn">;
+}) {
   const mode = useMotionMode();
 
   const root = useScrollScene(mode === "ring", 3.2, (el) => {
@@ -89,20 +94,20 @@ export function SphereLooks() {
         if (step !== -1) cue("tick");
         step = st;
       }
-      if (readout) readout.textContent = u > 0.6 ? "Ø / COLLAPSED" : `YAW ${String(Math.round(((yaw * 180) / Math.PI) % 360)).padStart(3, "0")}°`;
+      if (readout) readout.textContent = u > 0.6 ? t["study3.collapsed"] : `${t["study3.yaw"]} ${String(Math.round(((yaw * 180) / Math.PI) % 360)).padStart(3, "0")}°`;
     };
     return { render, dispose };
   });
 
   return (
-    <section ref={root} id="study-sphere" data-section data-theme="dark" className={styles.scene} data-mode={mode} aria-label="Study 03 — sphere of looks">
+    <section ref={root} id="study-sphere" data-section data-theme="dark" className={styles.scene} data-mode={mode} aria-label={t["study3.label"]}>
       <span className={styles.guide} style={{ top: "50%", opacity: 0.6 }} aria-hidden="true" />
-      <p className={`micro ${styles.label}`} aria-hidden="true">STUDY 03 / SPHERE OF LOOKS</p>
+      <p className={`micro ${styles.label}`} aria-hidden="true">{t["study3.label"]}</p>
       <p className={`micro ${styles.labelR}`} aria-hidden="true">
-        <span data-readout>YAW 000°</span>
+        <span data-readout>{t["study3.yaw"]} 000°</span>
       </p>
-      <p className={`micro ${styles.foot}`} aria-hidden="true">SCROLL TO TURN · DRAG TO SPIN</p>
-      <p className={`micro ${styles.footR}`} aria-hidden="true">40 LOOKS / ONE Ø</p>
+      <p className={`micro ${styles.foot}`} aria-hidden="true">{t["study.hintTurn"]}</p>
+      <p className={`micro ${styles.footR}`} aria-hidden="true">{t["study3.foot"]}</p>
       <div className={styles.stage}>
         {Array.from({ length: TILES }, (_, i) => (
           <div key={i} className={`${styles.item} ${styles.tile} ${styles.sphereTile}`} data-tile>
