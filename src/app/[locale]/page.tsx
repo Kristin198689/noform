@@ -22,7 +22,8 @@ import { DepthFlight } from "@/components/studies/DepthFlight";
 import { isLocale } from "@/i18n/config";
 import { getMessages, pick } from "@/i18n/messages";
 
-// Order from the brief: 01 HERO → pause A → 02 → 03 → pause B → 04 → 05 → 06 → 07 → 08.
+// Order from the brief: 01 HERO → pause A → 02 → 03 → pause B → 04 → 05 → 06 → 07 → 08,
+// with the letters ring after the hero and the helix archive between 03 and pause B.
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
@@ -52,6 +53,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       />
       <main id="content" tabIndex={-1}>
         <Hero t={pick(t, ["hero.tagline", "hero.independent", "hero.collection", "hero.left", "hero.start", "hero.right", "alt.hero"])} />
+        <LettersRing />
         <PauseA t={pick(t, ["pauseA.title", "pauseA.caption", "hero.independent"])} />
         <Lookbook
           t={pick(t, [
@@ -72,6 +74,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <About
           t={pick(t, ["about.title", "about.eyebrow", "about.p1", "about.p2", "about.p3", "about.disclaimer", "hero.tagline", "alt.low"])}
         />
+        <HelixArchive />
         <PauseB t={pick(t, ["pauseB.title"])} />
         <Visor
           t={pick(t, [
@@ -124,9 +127,20 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           ])}
         />
         {/* Review stage: candidate scenes, to be placed between sections after review. */}
-        <BeyondFrame t={pick(t, ["alt.portrait", "alt.glass"])} />
-        <LettersRing />
-        <HelixArchive />
+        <BeyondFrame
+          t={pick(t, [
+            "alt.portrait",
+            "alt.glass",
+            "beyond.title",
+            "beyond.frame1",
+            "beyond.frame2",
+            "beyond.stage1",
+            "beyond.stage2",
+            "beyond.stage3",
+            "beyond.stage4",
+            "beyond.stage5",
+          ])}
+        />
         <SphereLooks />
         <DepthFlight />
         <Finale

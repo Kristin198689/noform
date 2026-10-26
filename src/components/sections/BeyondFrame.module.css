@@ -88,6 +88,14 @@
   bottom: 28px;
   color: rgb(246 245 242 / 0.6);
 }
+/* phones: the stage name moves under the frame caption instead of sharing its row */
+@media (max-width: 767px) {
+  .labelR {
+    right: auto;
+    left: var(--gutter);
+    top: calc(var(--chrome-h) + 34px);
+  }
+}
 @media (max-width: 767px) {
   .footR {
     right: auto;
@@ -180,7 +188,8 @@
   top: 0;
   margin: 0;
   color: var(--pink);
-  font-size: clamp(3rem, 7.2vw, 8rem);
+  /* sized to the line length of each language, so the longest one still fits */
+  font-size: clamp(2.6rem, min(7.2vw, calc(118vw / var(--chars, 16))), 8rem);
   line-height: 0.9;
   letter-spacing: 0.01em;
   white-space: nowrap;
@@ -189,8 +198,12 @@
 }
 @media (max-width: 767px) {
   .word {
-    font-size: 21vw;
+    font-size: min(19vw, calc(112vw / var(--longest, 6)));
     text-align: center;
+  }
+  /* Golos (Ukrainian headings) runs wider than MuseoModerno */
+  :global(:lang(uk)) .word {
+    font-size: min(16vw, calc(94vw / var(--longest, 6)));
   }
   .word span {
     display: block;
@@ -215,13 +228,16 @@
     display: none;
   }
 }
+/* panel numbers sit inside each panel at its foot, so they never reach the caption rows */
 .num {
   position: absolute;
   left: 0;
-  top: calc(var(--ha) / -2 - 26px);
+  top: calc(var(--ha) / 2 - 28px);
   translate: -50% 0;
-  color: rgb(246 245 242 / 0.7);
+  color: rgb(246 245 242 / 0.85);
+  text-shadow: 0 0 8px rgb(8 8 8 / 0.8);
   opacity: 0;
+  z-index: 1;
 }
 .spin {
   position: absolute;
@@ -235,14 +251,15 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
+/* +1px: neighbouring panels overlap by a pixel, so no hairline shows while they start to part */
 .faceA {
-  width: var(--fwa);
+  width: calc(var(--fwa) + 1px);
   height: var(--ha);
   left: calc(var(--fwa) / -2);
   top: calc(var(--ha) / -2);
 }
 .faceB {
-  width: var(--fwb);
+  width: calc(var(--fwb) + 1px);
   height: var(--sb);
   left: calc(var(--fwb) / -2);
   top: calc(var(--sb) / -2);

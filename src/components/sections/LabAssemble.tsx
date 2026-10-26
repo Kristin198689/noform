@@ -93,9 +93,9 @@ export function LabAssemble({ phrase }: { phrase: string }) {
         scrollTrigger: {
           trigger: root.current,
           start: "top top",
-          end: () => `+=${window.innerHeight * 5}`,
+          end: () => `+=${window.innerHeight * 7.5}`,
           pin: true,
-          scrub: 1,
+          scrub: 1.5,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
@@ -178,7 +178,7 @@ export function LabAssemble({ phrase }: { phrase: string }) {
       ScrollTrigger.create({
         trigger: root.current,
         start: "top bottom",
-        end: () => `+=${window.innerHeight * 5}`,
+        end: () => `+=${window.innerHeight * 9.5}`,
         onToggle: (self) => bobs.forEach((b) => (self.isActive ? b.play() : b.pause())),
       });
       return () => bobs.forEach((b) => b.kill());

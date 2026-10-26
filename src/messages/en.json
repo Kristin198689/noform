@@ -84,6 +84,14 @@
   "alt.visor": "Front portrait with a silver mirrored visor.",
   "alt.portrait": "Black-and-white close portrait of a model in a hood, cap and silver mirrored visor.",
   "alt.glass": "Model in a hoodie and wide cargo denim, photographed from below through a glass floor.",
+  "beyond.title": "BEYOND THE FRAME",
+  "beyond.frame1": "FRAME 01 / PORTRAIT",
+  "beyond.frame2": "FRAME 02 / UNDER GLASS",
+  "beyond.stage1": "PORTRAIT",
+  "beyond.stage2": "SPLIT",
+  "beyond.stage3": "BEYOND",
+  "beyond.stage4": "RETURN",
+  "beyond.stage5": "UNDER GLASS",
   "tunnel.title": "INSIDE THE FORM.",
   "lab.assembled": "YOUR FORM. YOUR RULES."
 }

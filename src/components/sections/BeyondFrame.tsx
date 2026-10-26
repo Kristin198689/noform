@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useSyncExternalStore } from "react";
 import { Img } from "@/components/Img";
 import { gsap, refreshInOrder, useGSAP } from "@/lib/gsap";
 import { useMotionMode } from "@/lib/useMotionMode";
@@ -31,13 +31,22 @@ const PHONE: Pose[] = [
   { x: 3, y: -0.09, z: -260, ry: -28, rx: 6 },
 ];
 
-const STAGES: [number, string][] = [
-  [0.15, "PORTRAIT"],
-  [0.45, "SPLIT"],
-  [0.6, "BEYOND"],
-  [0.85, "RETURN"],
-  [1.01, "UNDER GLASS"],
-];
+// where each stage name ends, in timeline progress
+const STAGE_ENDS = [0.15, 0.45, 0.6, 0.85, 1.01];
+const STAGE_KEYS = ["beyond.stage1", "beyond.stage2", "beyond.stage3", "beyond.stage4", "beyond.stage5"] as const;
+
+const PHONE_QUERY = "(max-width: 767px)";
+function subscribePhone(onChange: () => void) {
+  const mq = window.matchMedia(PHONE_QUERY);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+/** Phone or not, so the scene is rebuilt (5 or 7 panels) when the breakpoint is crossed. */
+function usePhone(): boolean {
+  return useSyncExternalStore(subscribePhone, () => window.matchMedia(PHONE_QUERY).matches, () => false);
+}
+
+type Strings = Pick<Messages, "alt.portrait" | "alt.glass" | "beyond.title" | "beyond.frame1" | "beyond.frame2" | (typeof STAGE_KEYS)[number]>;
 
 /**
  * BEYOND THE FRAME. A whole portrait splits into vertical panels of one shared image plane; they part in
@@ -45,9 +54,13 @@ const STAGES: [number, string][] = [
  * the second photograph (under glass). The assembled states are the flat whole photographs, so no seam can
  * show; the panels only exist in between and only once both photographs are decoded.
  */
-export function BeyondFrame({ t }: { t: Pick<Messages, "alt.portrait" | "alt.glass"> }) {
+export function BeyondFrame({ t }: { t: Strings }) {
   const root = useRef<HTMLElement>(null);
   const mode = useMotionMode();
+  const phone = usePhone();
+  const stageNames = STAGE_KEYS.map((k) => t[k]);
+  const words = t["beyond.title"].split(" ");
+  const longest = Math.max(...words.map((w) => w.length));
 
   useGSAP(
     () => {
@@ -63,7 +76,6 @@ export function BeyondFrame({ t }: { t: Pick<Messages, "alt.portrait" | "alt.gla
       const stage = el.querySelector<HTMLElement>("[data-stage-name]");
       if (!wholeA || !wholeB || !panelsEl || !world) return;
 
-      const phone = window.innerWidth < 768;
       const n = phone ? 5 : MAX_PANELS;
       const poses = phone ? PHONE : DESKTOP;
       const slots = q("[data-slot]").slice(0, n);
@@ -96,7 +108,8 @@ export function BeyondFrame({ t }: { t: Pick<Messages, "alt.portrait" | "alt.gla
         }
         if (pct) pct.textContent = String(Math.round(p * 100)).padStart(3, "0");
         if (bar) bar.style.transform = `scaleX(${p.toFixed(3)})`;
-        if (stage) stage.textContent = (STAGES.find(([end]) => p < end) ?? STAGES[STAGES.length - 1]!)[1];
+        const si = STAGE_ENDS.findIndex((end) => p < end);
+        if (stage) stage.textContent = stageNames[si < 0 ? stageNames.length - 1 : si]!;
       };
       const io = new IntersectionObserver(
         (entries) => {
@@ -168,7 +181,7 @@ export function BeyondFrame({ t }: { t: Pick<Messages, "alt.portrait" | "alt.gla
       requestAnimationFrame(refreshInOrder);
       return () => io.disconnect();
     },
-    { scope: root, dependencies: [mode], revertOnUpdate: true },
+    { scope: root, dependencies: [mode, phone], revertOnUpdate: true },
   );
 
   return (
@@ -176,13 +189,13 @@ export function BeyondFrame({ t }: { t: Pick<Messages, "alt.portrait" | "alt.gla
       <span className={styles.guide} style={{ top: "14%" }} aria-hidden="true" />
       <span className={styles.guide} style={{ top: "88%" }} aria-hidden="true" />
       <p className={`micro ${styles.label}`} aria-hidden="true">
-        <span data-f1>FRAME 01 / PORTRAIT</span>
+        <span data-f1>{t["beyond.frame1"]}</span>
         <span className={styles.f2} data-f2>
-          FRAME 02 / UNDER GLASS
+          {t["beyond.frame2"]}
         </span>
       </p>
       <p className={`micro ${styles.labelR}`} aria-hidden="true">
-        <span data-stage-name>PORTRAIT</span>
+        <span data-stage-name>{stageNames[0]}</span>
       </p>
       <div className={`micro ${styles.foot}`} aria-hidden="true">
         <span>
@@ -196,7 +209,7 @@ export function BeyondFrame({ t }: { t: Pick<Messages, "alt.portrait" | "alt.gla
         </span>
       </div>
       <p className={`micro ${styles.footR}`} aria-hidden="true">
-        BEYOND THE FRAME / 2026
+        {t["beyond.title"]} / 2026
       </p>
 
       <div className={styles.stage}>
@@ -210,8 +223,18 @@ export function BeyondFrame({ t }: { t: Pick<Messages, "alt.portrait" | "alt.gla
         </div>
 
         <div className={styles.world} data-world>
-          <h2 id="beyond-title" className={`display ${styles.word}`} data-word>
-            <span>BEYOND</span> <span>THE</span> <span>FRAME</span>
+          <h2
+            id="beyond-title"
+            className={`display ${styles.word}`}
+            data-word
+            style={{ "--chars": t["beyond.title"].length, "--longest": longest } as React.CSSProperties}
+          >
+            {words.map((w, i) => (
+              <span key={i}>
+                {w}
+                {i < words.length - 1 ? " " : ""}
+              </span>
+            ))}
           </h2>
           <div className={styles.panels} data-panels aria-hidden="true">
             {Array.from({ length: MAX_PANELS }, (_, i) => (

@@ -35,7 +35,7 @@ const ITEMS: { id: string; key: keyof ChromeStrings; media?: MediaId }[] = [
 ];
 
 /** Section ids that belong to an index entry (pauses map to the section before them). */
-const SECTION_FOR: Record<string, string> = { reset: "hero", perspective: "about", inside: "code", beyond: "lab", "study-ring": "lab", "study-helix": "lab", "study-sphere": "lab", "study-depth": "lab" };
+const SECTION_FOR: Record<string, string> = { reset: "hero", perspective: "about", inside: "code", beyond: "lab", "study-ring": "hero", "study-helix": "about", "study-sphere": "lab", "study-depth": "lab" };
 
 function LangSwitch({ locale, hash, className }: { locale: Locale; hash: string; className?: string }) {
   return (
