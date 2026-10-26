@@ -1,0 +1,218 @@
+/* Shared frame for the four candidate scenes (review stage: they sit before the finale). */
+.scene {
+  position: relative;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  background: radial-gradient(60% 50% at 50% 55%, rgb(246 245 242 / 0.06), transparent 70%), var(--black);
+  color: var(--white);
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.scene[data-mode="list"] {
+  height: auto;
+  min-height: 0;
+  padding: calc(var(--chrome-h) + 56px) var(--gutter) 72px;
+}
+
+.label,
+.labelR,
+.foot,
+.footR {
+  position: absolute;
+  z-index: 5;
+  margin: 0;
+  white-space: nowrap;
+}
+.label {
+  left: var(--gutter);
+  top: calc(var(--chrome-h) + 12px);
+}
+.labelR {
+  right: var(--gutter);
+  top: calc(var(--chrome-h) + 12px);
+}
+.foot {
+  left: var(--gutter);
+  bottom: 28px;
+}
+.footR {
+  right: var(--gutter);
+  bottom: 28px;
+  color: var(--pink);
+}
+.scene[data-mode="list"] .label,
+.scene[data-mode="list"] .labelR,
+.scene[data-mode="list"] .foot,
+.scene[data-mode="list"] .footR {
+  position: static;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.guide {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line-on-black);
+}
+
+.stage {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 0;
+  height: 0;
+}
+.scene[data-mode="list"] .stage {
+  position: relative;
+  left: auto;
+  top: auto;
+  width: auto;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.item {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+.scene[data-mode="list"] .item {
+  position: relative;
+  transform: none !important;
+  opacity: 1 !important;
+}
+.item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+}
+
+/* letters ring */
+.ringLetter {
+  height: 30svh;
+}
+@media (max-width: 767px) {
+  .ringLetter {
+    height: 20svh;
+  }
+}
+.scene[data-mode="list"] .ringLetter {
+  height: 14vw;
+}
+.letter {
+  overflow: hidden; /* each window shows only its own letter */
+}
+.letterOutline {
+  fill: none;
+  stroke: rgb(246 245 242 / 0.85);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+
+/* tiles */
+.tile {
+  overflow: hidden;
+  background: var(--charcoal);
+}
+.tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgb(246 245 242 / 0.18);
+  pointer-events: none;
+}
+
+.mark {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: min(84vw, 1200px);
+  height: auto;
+  translate: -50% -50%;
+  color: var(--white);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.scene[data-mode="list"] .mark {
+  position: relative;
+  left: auto;
+  top: auto;
+  translate: none;
+  opacity: 1;
+  margin: 24px auto 0;
+}
+
+/* helix */
+.helixTile {
+  width: min(11vw, 20svh);
+  aspect-ratio: 1;
+}
+@media (max-width: 767px) {
+  .helixTile {
+    width: 24vw;
+  }
+}
+.scene[data-mode="list"] .helixTile {
+  width: 72px;
+}
+
+/* sphere */
+.sphereTile {
+  width: min(8.5vw, 15svh);
+  aspect-ratio: 3 / 4;
+}
+@media (max-width: 767px) {
+  .sphereTile {
+    width: 19vw;
+  }
+}
+.scene[data-mode="list"] .sphereTile {
+  width: 64px;
+}
+
+/* depth flight */
+.depthFrame {
+  width: min(26vw, 34svh);
+  aspect-ratio: 2 / 3;
+}
+.depthFrame[data-wide] {
+  width: min(36vw, 52svh);
+  aspect-ratio: 3 / 2;
+}
+@media (max-width: 767px) {
+  .depthFrame {
+    width: 52vw;
+  }
+  .depthFrame[data-wide] {
+    width: 72vw;
+  }
+}
+.scene[data-mode="list"] .depthFrame,
+.scene[data-mode="list"] .depthFrame[data-wide] {
+  width: 120px;
+}
+
+@media (max-width: 767px) {
+  .footR {
+    right: auto;
+    left: var(--gutter);
+    bottom: 52px;
+  }
+}
+
+/* helix: the legible wordmark over the assembled mosaic (width set from the mosaic scale) */
+.helixMark {
+  top: 52%;
+  filter: drop-shadow(0 0 18px rgb(8 8 8 / 0.65));
+}

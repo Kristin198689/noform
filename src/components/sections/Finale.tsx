@@ -7,7 +7,6 @@ import { studioUrl } from "@/lib/site";
 import { WORDMARK_PATH, WORDMARK_VIEWBOX } from "@/lib/wordmark";
 import type { Locale } from "@/i18n/config";
 import type { Messages } from "@/i18n/messages";
-import { LiquidMirror } from "./LiquidMirror";
 import styles from "./Finale.module.css";
 
 type Strings = Pick<
@@ -83,40 +82,37 @@ export function Finale({ t, locale }: { t: Strings; locale: Locale }) {
           <span data-converge-r />
         </span>
         <span className="cross" style={{ left: "var(--gutter)", top: "calc(2.2em + 0px)" }} aria-hidden="true" />
-        <div className={styles.mirrorStage}>
-          <LiquidMirror className={styles.mirror} />
-          <svg
-            data-speed="-0.6"
-            className={styles.mark}
-            viewBox={WORDMARK_VIEWBOX}
-            role="img"
-            aria-label="NØFORM"
-            onPointerEnter={(e) => {
-              if (e.pointerType === "mouse") pinkRun.current?.();
-            }}
-          >
-            <path
-              data-outline
-              d={WORDMARK_PATH}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.3"
-              vectorEffect="non-scaling-stroke"
-              pathLength={1}
-              strokeDasharray="1"
-            />
-            <path
-              data-run
-              className={styles.run}
-              d={WORDMARK_PATH}
-              fill="none"
-              strokeWidth="2.2"
-              vectorEffect="non-scaling-stroke"
-              pathLength={1}
-              strokeDasharray="0.14 0.86"
-            />
-          </svg>
-        </div>
+        <svg
+          data-speed="-0.6"
+          className={styles.mark}
+          viewBox={WORDMARK_VIEWBOX}
+          role="img"
+          aria-label="NØFORM"
+          onPointerEnter={(e) => {
+            if (e.pointerType === "mouse") pinkRun.current?.();
+          }}
+        >
+          <path
+            data-outline
+            d={WORDMARK_PATH}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.3"
+            vectorEffect="non-scaling-stroke"
+            pathLength={1}
+            strokeDasharray="1"
+          />
+          <path
+            data-run
+            className={styles.run}
+            d={WORDMARK_PATH}
+            fill="none"
+            strokeWidth="2.2"
+            vectorEffect="non-scaling-stroke"
+            pathLength={1}
+            strokeDasharray="0.14 0.86"
+          />
+        </svg>
         <span className={styles.lineBottom} aria-hidden="true">
           <span data-converge-l />
           <span data-converge-r />

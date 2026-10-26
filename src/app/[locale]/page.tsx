@@ -14,6 +14,10 @@ import { DesignCode } from "@/components/sections/DesignCode";
 import { Scanner } from "@/components/sections/Scanner";
 import { FormLab } from "@/components/sections/FormLab";
 import { Finale } from "@/components/sections/Finale";
+import { LettersRing } from "@/components/studies/LettersRing";
+import { HelixArchive } from "@/components/studies/HelixArchive";
+import { SphereLooks } from "@/components/studies/SphereLooks";
+import { DepthFlight } from "@/components/studies/DepthFlight";
 import { isLocale } from "@/i18n/config";
 import { getMessages, pick } from "@/i18n/messages";
 
@@ -118,6 +122,11 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             "lab.assembled",
           ])}
         />
+        {/* Review stage: four candidate scenes, to be placed between sections after review. */}
+        <LettersRing />
+        <HelixArchive />
+        <SphereLooks />
+        <DepthFlight />
         <Finale
           locale={locale}
           t={pick(t, ["end.heading", "end.subtitle", "end.concept", "end.credit", "end.fiction", "ui.top", "legal.imprint", "legal.privacy"])}
