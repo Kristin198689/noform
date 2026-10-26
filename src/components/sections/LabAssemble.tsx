@@ -70,9 +70,9 @@ const O_FROM = O_POINTS.map((_, i) => {
 });
 
 /**
- * Assemble your form. The pieces arrive from nowhere (out of the depth), close into the silhouette of
- * an invisible wearer, hold with the phrase, then leave to nowhere (past the viewer, beyond the edges);
- * in the emptied centre a Ø of campaign tiles gathers. One scrubbed timeline, pinned for a fixed length.
+ * Assemble your form. A wall of campaign tiles fills the screen and implodes into a point; out of it the
+ * pieces burst and close into the silhouette of an invisible wearer, hold with the phrase, then leave to
+ * nowhere (past the viewer, beyond the edges); the same tiles return as a Ø in the emptied centre. One scrubbed timeline, pinned for a fixed length.
  */
 export function LabAssemble({ phrase }: { phrase: string }) {
   const root = useRef<HTMLDivElement>(null);
@@ -93,7 +93,7 @@ export function LabAssemble({ phrase }: { phrase: string }) {
         scrollTrigger: {
           trigger: root.current,
           start: "top top",
-          end: () => `+=${window.innerHeight * 3.2}`,
+          end: () => `+=${window.innerHeight * 3.8}`,
           pin: true,
           scrub: 1,
           anticipatePin: 1,
@@ -101,29 +101,63 @@ export function LabAssemble({ phrase }: { phrase: string }) {
         },
       });
 
+      // 1. The opening: a wall of campaign tiles fills the screen edge to edge, then implodes into the centre.
+      const tiles = q("[data-otile]");
+      const wall = () => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        const phone = w < 768;
+        const cols = phone ? 5 : 8;
+        const rows = phone ? 6 : 4;
+        const th = phone ? h / 6.2 : h / 3.6;
+        const tw = th * 0.75;
+        const base = tiles[0]?.offsetWidth || 1;
+        // phones fill all 30 cells; the 8 × 4 desktop wall leaves its two outer corners empty
+        const slots = Array.from({ length: cols * rows }, (_, k) => k).filter((k) => phone || (k !== 0 && k !== cols * rows - 1));
+        return { cols, rows, sx: tw + 8, sy: th + 8, scale: tw / base, slots };
+      };
+      const cell = (i: number) => {
+        const g = wall();
+        const k = g.slots[i] ?? 0;
+        return { x: ((k % g.cols) - (g.cols - 1) / 2) * g.sx, y: (Math.floor(k / g.cols) - (g.rows - 1) / 2) * g.sy, scale: g.scale };
+      };
+      tiles.forEach((t, i) => {
+        const d = Math.hypot(O_FROM[i]!.x, O_FROM[i]!.y);
+        tl.fromTo(
+          t,
+          { x: () => cell(i).x, y: () => cell(i).y, scale: () => cell(i).scale, rotation: 0, opacity: 1 },
+          { x: 0, y: 0, scale: 0.04, rotation: (i % 2 ? 1 : -1) * (120 + (i % 5) * 30), opacity: 0, duration: 0.11, ease: "power3.in" },
+          0.03 + (d - 2.4) * 0.012 + (i % 6) * 0.004,
+        );
+      });
+      tl.add(() => cue("pulse"), 0.15)
+        .fromTo(q("[data-burst]"), { scale: 0, opacity: 0.9 }, { scale: 1, opacity: 0, duration: 0.08, ease: "power2.out", immediateRender: false }, 0.15);
+
+      // 2. Out of that point the pieces burst and close into the silhouette.
       PARTS.forEach((p, i) => {
-        const el = q(`[data-part="${p.key}"]`);
-        const [fx, fy, fr, fs, fo] = p.from;
+        const el = q(`[data-part="${p.key}"]`)[0];
+        if (!el) return;
+        const [, , fr] = p.from;
         const [tx, ty, tr, ts, to] = p.to;
-        // arrive from the depth
-        tl.fromTo(el, { x: sx(fx), y: sy(fy), rotation: fr, scale: fs, opacity: fo }, { x: 0, y: 0, rotation: 0, scale: 1, opacity: 1, duration: 0.26, ease: "power3.out" }, 0.02 + i * 0.04)
-          // leave to nowhere: towards the viewer and past the edges
-          .to(el, { x: sx(tx), y: sy(ty), rotation: tr, scale: ts, opacity: to, duration: 0.16, ease: "power2.in" }, 0.56 + i * 0.02);
+        const toCentreX = () => stage.offsetWidth / 2 - (el.offsetLeft + el.offsetWidth / 2);
+        const toCentreY = () => stage.offsetHeight / 2 - (el.offsetTop + el.offsetHeight / 2);
+        tl.fromTo(el, { x: toCentreX, y: toCentreY, rotation: fr * 2, scale: 0.05, opacity: 0 }, { x: 0, y: 0, rotation: 0, scale: 1, opacity: 1, duration: 0.2, ease: "power3.out" }, 0.15 + i * 0.03)
+          // 4. leave to nowhere: towards the viewer and past the edges
+          .to(el, { x: sx(tx), y: sy(ty), rotation: tr, scale: ts, opacity: to, duration: 0.14, ease: "power2.in" }, 0.6 + i * 0.02);
       });
 
-      tl.add(() => cue("snap"), 0.32)
-        .fromTo(q("[data-snap]"), { scale: 0.6, opacity: 0.9 }, { scale: 1.5, opacity: 0, duration: 0.08, ease: "power2.out", immediateRender: false }, 0.31)
-        .fromTo(q("[data-shadow]"), { scaleX: 0.2, opacity: 0 }, { scaleX: 1, opacity: 0.55, duration: 0.2 }, 0.14)
-        .to(q("[data-shadow]"), { scaleX: 0.2, opacity: 0, duration: 0.12 }, 0.56)
-        // hold: labels and phrase
-        .fromTo(q("[data-part-label]"), { opacity: 0 }, { opacity: 1, duration: 0.05, stagger: 0.02 }, 0.33)
-        .to(q("[data-part-label]"), { opacity: 0, duration: 0.04 }, 0.53)
-        .fromTo(q("[data-word]"), { yPercent: 110 }, { yPercent: 0, duration: 0.08, stagger: 0.03, ease: "power3.out" }, 0.36)
-        .to(q("[data-word]"), { yPercent: -110, duration: 0.06, stagger: 0.02, ease: "power2.in" }, 0.52)
-        .fromTo(q("[data-guide]"), { scaleX: 0 }, { scaleX: 1, duration: 0.3 }, 0);
+      // 3. Hold: snap, labels and the phrase
+      tl.add(() => cue("snap"), 0.38)
+        .fromTo(q("[data-snap]"), { scale: 0.6, opacity: 0.9 }, { scale: 1.5, opacity: 0, duration: 0.08, ease: "power2.out", immediateRender: false }, 0.37)
+        .fromTo(q("[data-shadow]"), { scaleX: 0.2, opacity: 0 }, { scaleX: 1, opacity: 0.55, duration: 0.18 }, 0.2)
+        .to(q("[data-shadow]"), { scaleX: 0.2, opacity: 0, duration: 0.1 }, 0.6)
+        .fromTo(q("[data-part-label]"), { opacity: 0 }, { opacity: 1, duration: 0.05, stagger: 0.02 }, 0.39)
+        .to(q("[data-part-label]"), { opacity: 0, duration: 0.04 }, 0.57)
+        .fromTo(q("[data-word]"), { yPercent: 110 }, { yPercent: 0, duration: 0.08, stagger: 0.03, ease: "power3.out" }, 0.41)
+        .to(q("[data-word]"), { yPercent: -110, duration: 0.06, stagger: 0.02, ease: "power2.in" }, 0.56)
+        .fromTo(q("[data-guide]"), { scaleX: 0 }, { scaleX: 1, duration: 0.3 }, 0.15);
 
-      // the Ø gathers in the emptied centre
-      const tiles = q("[data-otile]");
+      // 5. The same tiles return and gather into a Ø in the emptied centre
       const R = () => Math.min(stage.offsetHeight * 0.3, window.innerWidth * 0.34);
       tiles.forEach((t, i) => {
         const f = O_FROM[i]!;
@@ -131,11 +165,11 @@ export function LabAssemble({ phrase }: { phrase: string }) {
         tl.fromTo(
           t,
           { x: () => f.x * R(), y: () => f.y * R(), rotation: f.rot, scale: 0.2, opacity: 0 },
-          { x: () => o.x * R(), y: () => o.y * R(), rotation: o.rot, scale: 1, opacity: 1, duration: 0.18, ease: "power3.out" },
-          0.68 + (i / O_TILES) * 0.12,
+          { x: () => o.x * R(), y: () => o.y * R(), rotation: o.rot, scale: 1, opacity: 1, duration: 0.16, ease: "power3.out", immediateRender: false },
+          0.72 + (i / O_TILES) * 0.1,
         );
       });
-      tl.fromTo(q("[data-o-caption]"), { opacity: 0 }, { opacity: 1, duration: 0.06 }, 0.9);
+      tl.fromTo(q("[data-o-caption]"), { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0.92);
 
       // decorative float on inner layers while the scene is on screen
       const bobs = q("[data-bob]").map((b, i) =>
@@ -188,6 +222,7 @@ export function LabAssemble({ phrase }: { phrase: string }) {
         ))}
       </div>
 
+      <span className={styles.burst} data-burst aria-hidden="true" />
       <div className={styles.oLayer} data-o aria-hidden="true">
         {Array.from({ length: O_TILES }, (_, i) => (
           <div key={i} className={styles.oTile} data-otile>

@@ -1,4 +1,6 @@
 .assemble {
+  /* explicit full-bleed width: the pin keeps the measured width, negative margins alone are lost */
+  width: calc(100% + 2 * var(--gutter));
   margin-inline: calc(-1 * var(--gutter));
   position: relative;
   height: 100svh;
@@ -194,5 +196,24 @@
 /* reduced motion: no Ø layer, the assembled outfit stays */
 .assemble[data-mode="list"] .oLayer,
 .assemble[data-mode="list"] .oCaption {
+  display: none;
+}
+
+/* the flash where the tile wall collapses and the pieces burst out */
+.burst {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(60vw, 70svh);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  border: 1px solid var(--pink);
+  background: radial-gradient(closest-side, rgb(246 245 242 / 0.9), rgb(246 245 242 / 0) 70%);
+  opacity: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.assemble[data-mode="list"] .burst {
   display: none;
 }

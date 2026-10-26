@@ -207,23 +207,23 @@
   .narrow {
     display: block;
   }
-  .stage {
-    height: auto;
-    min-height: 0;
-    padding-top: calc(var(--chrome-h) + 32px);
-    padding-bottom: 72px;
-  }
-  .canvas {
-    position: relative;
-    left: 50%;
-    top: auto;
-    width: 172vw;
-    translate: -50% 0;
+  /* full-height portrait, cropped to the visor; the text sits on a soft shade at the bottom */
+  .stage::before {
+    content: "";
+    position: absolute;
+    inset: 58% 0 0;
+    z-index: 1;
+    background: linear-gradient(to bottom, transparent, rgb(8 8 8 / 0.72));
+    pointer-events: none;
   }
   .statement {
-    position: static;
-    max-width: none;
-    padding: 28px var(--gutter) 0;
+    z-index: 2;
+    top: auto;
+    bottom: 64px;
+    max-width: calc(100vw - 2 * var(--gutter));
+  }
+  .bottom {
+    z-index: 2;
   }
   .vertical {
     display: none;
@@ -236,8 +236,8 @@
     font-size: 17vw;
   }
   .titleBlock {
-    width: 58%;
-    top: 63%;
+    width: calc(100vw - 2 * var(--gutter));
+    top: 54%;
   }
   .badge {
     font-size: 11px;

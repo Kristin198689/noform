@@ -36,7 +36,7 @@ function mosaicCells(target: number): { x: number; y: number; size: number }[] {
 export function HelixArchive() {
   const mode = useMotionMode();
 
-  const root = useScrollScene(mode === "ring", 3.4, (el) => {
+  const root = useScrollScene(mode === "ring", 5.4, (el) => {
     const tiles = Array.from(el.querySelectorAll<HTMLElement>("[data-tile]"));
     const readout = el.querySelector<HTMLElement>("[data-readout]");
     const mark = el.querySelector<HTMLElement>("[data-mark]");

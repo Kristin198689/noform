@@ -28,11 +28,11 @@ const POINTERS = [
   { key: "visor.temples", dot: [1119, 283], path: "M1119 283 L1215 299 L1300 299", label: [1314, 299], align: "start" },
   { key: "visor.curve", dot: [965, 172], path: "M965 172 L1105 130 L1218 130", label: [1232, 130], align: "start" },
 ] as const;
-// Phones crop the sides of the portrait, so the leaders turn inwards.
+// Phones show the portrait full-height, cropped to the centre of the visor: the leaders stay on the lens,
+// the temples are outside the frame there.
 const POINTERS_NARROW = [
-  { key: "visor.shield", dot: [408, 283], path: "M408 283 L396 352", label: [360, 380], align: "start" },
-  { key: "visor.temples", dot: [1119, 283], path: "M1119 283 L1150 418", label: [1196, 446], align: "end" },
-  { key: "visor.curve", dot: [965, 172], path: "M965 172 L1010 98", label: [1196, 76], align: "end" },
+  { key: "visor.shield", dot: [640, 300], path: "M640 300 L612 404", label: [600, 432], align: "start" },
+  { key: "visor.curve", dot: [900, 170], path: "M900 170 L872 146", label: [882, 146], align: "end" },
 ] as const;
 
 const V_LINES = [430, 768, 1105];
@@ -51,15 +51,17 @@ export function Visor({ t }: { t: Strings }) {
           { scale: 1 },
           { scale: 1.04, ease: "none", scrollTrigger: { trigger: root.current, start: "top bottom", end: "bottom top", scrub: 0.6 } },
         );
+        // only the pointer set that is on screen (phones show the narrow one)
+        const set = `.${window.matchMedia("(max-width: 767px), (max-aspect-ratio: 1/1)").matches ? styles.narrow : styles.wide}`;
         const tl = gsap.timeline({ scrollTrigger: { trigger: root.current, start: "top 55%", once: true } });
         tl.from("[data-grid-v]", { scaleY: 0, duration: 1, ease: "power3.out", stagger: 0.08 })
           .from("[data-grid-h]", { scaleX: 0, duration: 1, ease: "power3.out", stagger: 0.08 }, 0.1)
-          .from("[data-pointer-line]", { strokeDashoffset: 1, duration: 0.7, ease: "power2.out", stagger: 0.28 }, 0.5)
+          .from(`${set} [data-pointer-line]`, { strokeDashoffset: 1, duration: 0.7, ease: "power2.out", stagger: 0.28 }, 0.5)
           .add(() => cue("pulse"), 0.5)
           .add(() => cue("pulse"), 0.78)
           .add(() => cue("pulse"), 1.06)
-          .from("[data-pointer-dot]", { scale: 0, transformOrigin: "50% 50%", duration: 0.35, stagger: 0.28 }, 0.5)
-          .from("[data-pointer-label]", { opacity: 0, duration: 0.5, stagger: 0.28 }, 0.8)
+          .from(`${set} [data-pointer-dot]`, { scale: 0, transformOrigin: "50% 50%", duration: 0.35, stagger: 0.28 }, 0.5)
+          .from(`${set} [data-pointer-label]`, { opacity: 0, duration: 0.5, stagger: 0.28 }, 0.8)
           .from("[data-fade]", { opacity: 0, y: 10, duration: 0.8, ease: "power3.out", stagger: 0.08 }, 0.6);
       });
       return () => mm.revert();
@@ -71,7 +73,7 @@ export function Visor({ t }: { t: Strings }) {
     <section id="visor" data-section ref={root} className={styles.visor} aria-labelledby="visor-title">
       <div className={styles.stage} data-theme="photo">
         <div className={styles.canvas} data-canvas>
-          <Img id="visor-front" alt={t["alt.visor"]} sizes="(max-width: 767px) 170vw, 100vw" className={styles.photo} />
+          <Img id="visor-front" alt={t["alt.visor"]} sizes="(max-width: 767px) 330vw, 100vw" className={styles.photo} />
 
           <div className={styles.grid} aria-hidden="true">
             {V_LINES.map((x) => (
