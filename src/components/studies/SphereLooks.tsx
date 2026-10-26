@@ -1,7 +1,7 @@
 "use client";
 
 import { Img } from "@/components/Img";
-import { attachDrag, clamp01, GALLERY, lerp, smooth, useScrollScene } from "@/lib/studies";
+import { attachDrag, clamp01, GALLERY, lerp, onceAbove, smooth, useScrollScene } from "@/lib/studies";
 import { useMotionMode } from "@/lib/useMotionMode";
 import { cue } from "@/lib/sound";
 import styles from "./Studies.module.css";
@@ -39,6 +39,7 @@ export function SphereLooks() {
     let yawDrag = 0;
     let lastP = 0;
     let step = -1;
+    const lock = onceAbove(0.9, () => cue("lock"));
     const dispose = attachDrag(el, (dx) => {
       yawDrag += dx * 0.006;
       render(lastP);
@@ -82,6 +83,7 @@ export function SphereLooks() {
         t.style.opacity = lerp(0.15 + depth * 0.85, 1, ui).toFixed(3);
         t.style.zIndex = String(Math.round(lerp(depth, 1, ui) * 100));
       }
+      lock(p);
       const st = Math.floor((yaw * 180) / Math.PI / 30);
       if (st !== step && u < 0.2) {
         if (step !== -1) cue("tick");

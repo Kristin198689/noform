@@ -116,3 +116,14 @@ export function attachDrag(el: HTMLElement, onDelta: (dx: number) => void): () =
     el.removeEventListener("pointercancel", pu);
   };
 }
+
+/** Fires once each time `p` rises past `at` (re-armed after it falls back below `at - 0.05`). */
+export function onceAbove(at: number, fire: () => void): (p: number) => void {
+  let armed = true;
+  return (p) => {
+    if (armed && p >= at) {
+      armed = false;
+      fire();
+    } else if (!armed && p < at - 0.05) armed = true;
+  };
+}

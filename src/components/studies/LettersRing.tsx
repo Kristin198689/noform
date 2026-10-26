@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { mediaSrc } from "@/components/Img";
 import media from "@/lib/media.json";
-import { attachDrag, GALLERY, GLYPHS, GLYPH_Y, lerp, smooth, useScrollScene, WORD } from "@/lib/studies";
+import { attachDrag, GALLERY, GLYPHS, GLYPH_Y, lerp, onceAbove, smooth, useScrollScene, WORD } from "@/lib/studies";
 import { useMotionMode } from "@/lib/useMotionMode";
 import { cue } from "@/lib/sound";
 import { WORDMARK_PATH } from "@/lib/wordmark";
@@ -27,6 +27,7 @@ export function LettersRing() {
     const readout = el.querySelector<HTMLElement>("[data-readout]");
     let drag = 0;
     let front = -1;
+    const lock = onceAbove(0.9, () => cue("lock"));
     let lastP = 0;
     const detach = attachDrag(el, (dx) => {
       drag -= dx * 0.25;
@@ -74,6 +75,7 @@ export function LettersRing() {
       }
       if (readout) readout.textContent = u > 0.5 ? "NØFORM" : `${GLYPHS[f]?.ch ?? ""} / 0${f + 1}`;
       const mark = el.querySelector<HTMLElement>("[data-caption]");
+      lock(p);
       if (mark) mark.style.opacity = smooth((p - 0.86) / 0.1).toFixed(3);
     };
     return { render, dispose: detach };

@@ -15,13 +15,16 @@ export type Cue =
   | "sweep" // scanner line passing a word
   | "lab" // form lab change
   | "snap" // outfit assembled: one quiet muffled click
+  | "part" // frame study: the panels part / close, a soft low air
+  | "lock" // a wordmark or Ø settles into place
+  | "shutter" // a photograph is revealed: muffled double click
   | "final"; // finale
 
 /**
  * Audible cues. The visor shimmer is retired (it read as notifications); every recipe below is
  * low-passed and short — no hiss, no high pings. Silence is better than an irritating effect.
  */
-const APPROVED = new Set<Cue>(["tick", "snap", "chime", "click", "pulse", "sweep", "lab", "final"]);
+const APPROVED = new Set<Cue>(["tick", "snap", "chime", "click", "pulse", "sweep", "lab", "part", "lock", "shutter", "final"]);
 const AMBIENT_APPROVED = true;
 
 const THROTTLE: Record<Cue, number> = {
@@ -33,6 +36,9 @@ const THROTTLE: Record<Cue, number> = {
   sweep: 350,
   lab: 55,
   snap: 800,
+  part: 900,
+  lock: 1500,
+  shutter: 700,
   final: 4000,
 };
 
@@ -98,11 +104,21 @@ export class SoundEngine {
         this.tone(t + 0.09, 587.33, "sine", 0.016, 0.08, 0.8, 1800);
         return;
       case "sweep": // scanner: soft pass of the line, kept under 1.6 kHz
-        return this.filteredSweep(t, 0.5);
+        return this.filteredSweep(t, 0.5, 500, 1400, 0.018, 2.2);
       case "final": // finale: short closing tone
         this.tone(t, 392, "sine", 0.03, 0.04, 1.0, 1500);
         this.tone(t + 0.14, 587.33, "sine", 0.017, 0.05, 1.1, 1500);
         this.tone(t + 0.28, 783.99, "sine", 0.01, 0.06, 1.2, 1500);
+        return;
+      case "part": // frame study: soft low air as the panels part or close, under 700 Hz
+        return this.filteredSweep(t, 0.9, 260, 700, 0.014, 1.4);
+      case "lock": // wordmark / Ø in place: a low, quiet fifth
+        this.tone(t, 196, "sine", 0.03, 0.01, 0.55, 1200);
+        this.tone(t + 0.06, 293.66, "sine", 0.014, 0.02, 0.6, 1200);
+        return;
+      case "shutter": // photo reveal: muffled double click, no noise
+        this.tone(t, 150, "sine", 0.035, 0.002, 0.05, 500);
+        this.tone(t + 0.07, 115, "sine", 0.03, 0.002, 0.06, 450);
         return;
       case "shimmer":
         return; // retired
@@ -194,18 +210,18 @@ export class SoundEngine {
     osc.stop(t + dur + 0.05);
   }
 
-  private filteredSweep(t: number, dur: number): void {
+  private filteredSweep(t: number, dur: number, from: number, to: number, peak: number, q: number): void {
     const ctx = this.ctx!;
     const src = ctx.createBufferSource();
     src.buffer = this.noise;
     const band = ctx.createBiquadFilter();
     band.type = "bandpass";
-    band.Q.value = 2.2;
-    band.frequency.setValueAtTime(500, t);
-    band.frequency.exponentialRampToValueAtTime(1400, t + dur);
+    band.Q.value = q;
+    band.frequency.setValueAtTime(from, t);
+    band.frequency.exponentialRampToValueAtTime(to, t + dur);
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(0.0001, t);
-    gain.gain.exponentialRampToValueAtTime(0.018, t + dur * 0.45);
+    gain.gain.exponentialRampToValueAtTime(peak, t + dur * 0.45);
     gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     src.connect(band).connect(gain).connect(this.master!);
     src.start(t, Math.random());

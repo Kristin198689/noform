@@ -2,7 +2,7 @@
 
 import { Img } from "@/components/Img";
 import { Wordmark } from "@/components/Wordmark";
-import { clamp01, GALLERY, smooth, useScrollScene } from "@/lib/studies";
+import { clamp01, GALLERY, onceAbove, smooth, useScrollScene } from "@/lib/studies";
 import { useMotionMode } from "@/lib/useMotionMode";
 import { cue } from "@/lib/sound";
 import styles from "./Studies.module.css";
@@ -30,6 +30,7 @@ export function DepthFlight() {
     const readout = el.querySelector<HTMLElement>("[data-readout]");
     const lean = { x: 0, y: 0, tx: 0, ty: 0 };
     let passed = -1;
+    const lock = onceAbove(0.78, () => cue("lock"));
     let lastP = 0;
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const onMove = (e: PointerEvent) => {
@@ -70,6 +71,7 @@ export function DepthFlight() {
         if (passed !== -1 && count > passed) cue("tick");
         passed = count;
       }
+      lock(p);
       if (mark) {
         const rel = END + 0.4 - cam;
         const s = Math.min(1, 1 / (1 + Math.max(0, rel)));

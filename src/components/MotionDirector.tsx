@@ -126,6 +126,7 @@ export function MotionDirector() {
             clipPath: "inset(0 0 0% 0)",
             duration: 1.4,
             ease: "expo.inOut",
+            onStart: () => cue("shutter"),
             scrollTrigger: { trigger: el, start: "top 88%", once: true },
           },
         );

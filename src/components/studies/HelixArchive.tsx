@@ -2,7 +2,7 @@
 
 import { Img } from "@/components/Img";
 import { Wordmark } from "@/components/Wordmark";
-import { attachDrag, clamp01, GALLERY, lerp, smooth, useScrollScene, WORD } from "@/lib/studies";
+import { attachDrag, clamp01, GALLERY, lerp, onceAbove, smooth, useScrollScene, WORD } from "@/lib/studies";
 import { useMotionMode } from "@/lib/useMotionMode";
 import { cue } from "@/lib/sound";
 import { WORDMARK_PATH } from "@/lib/wordmark";
@@ -45,6 +45,7 @@ export function HelixArchive() {
     let drag = 0;
     let lastP = 0;
     let step = -1;
+    const lock = onceAbove(0.86, () => cue("lock"));
     const dispose = attachDrag(el, (dx) => {
       drag -= dx * 0.3;
       render(lastP);
@@ -106,6 +107,7 @@ export function HelixArchive() {
         if (step !== -1) cue("tick");
         step = st;
       }
+      lock(p);
       if (mark) {
         mark.style.opacity = legible.toFixed(3);
         mark.style.transform = `scale(${lerp(1.04, 1, legible).toFixed(4)})`;

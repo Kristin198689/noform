@@ -4,6 +4,7 @@ import { useRef, useSyncExternalStore } from "react";
 import { Img } from "@/components/Img";
 import { gsap, refreshInOrder, useGSAP } from "@/lib/gsap";
 import { useMotionMode } from "@/lib/useMotionMode";
+import { cue } from "@/lib/sound";
 import type { Messages } from "@/i18n/messages";
 import styles from "./BeyondFrame.module.css";
 
@@ -175,6 +176,10 @@ export function BeyondFrame({ t }: { t: Strings }) {
         .fromTo(q("[data-mark='b']"), { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0.85)
         .fromTo(q("[data-f1]"), { opacity: 1 }, { opacity: 0, duration: 0.05 }, 0.66)
         .fromTo(q("[data-f2]"), { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0.7)
+        // sound: soft air as the panels part and as they close, a low fifth when frame 02 is whole
+        .add(() => cue("part"), 0.16)
+        .add(() => cue("part"), 0.61)
+        .add(() => cue("lock"), 0.85)
         // 85–100 %: the whole second frame holds, then eases back a touch as the scene hands over
         .fromTo(wholeB, { scale: 1 }, { scale: 0.97, duration: 0.08, ease: "power1.in" }, 0.92);
       gate(0);
