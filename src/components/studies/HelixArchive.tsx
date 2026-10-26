@@ -57,12 +57,16 @@ export function HelixArchive() {
       const tile = phone ? w * 0.24 : Math.min(w * 0.11, h * 0.2);
       const R = phone ? w * 0.34 : Math.min(w * 0.26, 460);
       const rise = tile * 0.24; // vertical pitch of the helix
-      const climb = smooth(p / 0.64);
+      // the camera starts moving at once (no ease-in from rest), so the helix never sits frozen
+      const ct = clamp01(p / 0.64);
+      const climb = 1 - (1 - ct) ** 1.6;
       const spin = climb * 300 + drag;
-      const camY = lerp(-TILES * rise * 0.15, TILES * rise * 0.85, climb);
-      const u = clamp01((p - 0.58) / 0.26);
+      // the first tiles start in the lower third and rise in with the section; then the camera climbs
+      // through a full screen of the helix up to the last tile
+      const camY = lerp(-h * 0.3, phoneCount * rise - h * 0.45, climb);
+      const u = clamp01((p - 0.5) / 0.3);
       // once the mosaic is in place, the crisp wordmark surfaces over it and the photos step back
-      const legible = smooth((p - 0.84) / 0.1);
+      const legible = smooth((p - 0.8) / 0.1);
       const k = Math.min((w * 0.86) / WORD.w, (h * 0.34) / WORD.h);
       for (let i = 0; i < TILES; i++) {
         const t = tiles[i];
@@ -88,9 +92,11 @@ export function HelixArchive() {
         const z = lerp(hz, 0, ui);
         const rot = lerp(-s * 40, 0, ui);
         const sc = lerp(1, ts * 0.94, ui);
-        const visible = Math.abs(hy) < h * 0.75 || ui > 0;
+        // tiles fade out softly towards the top and bottom edges instead of vanishing at a cut-off
+        const edge = clamp01((h * 0.78 - Math.abs(hy)) / (h * 0.22));
         const depth = (c + 1) / 2;
-        const op = (cell ? lerp(visible ? 0.2 + 0.8 * depth : 0, 1, ui) : lerp(visible ? 0.2 + 0.8 * depth : 0, 0, ui)) * lerp(1, 0.2, legible);
+        const base = (0.2 + 0.8 * depth) * edge;
+        const op = (cell ? lerp(base, 1, ui) : lerp(base, 0, ui)) * lerp(1, 0.2, legible);
         t.style.transform = `translate(-50%, -50%) perspective(1500px) translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, ${z.toFixed(1)}px) rotateY(${rot.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
         t.style.opacity = op.toFixed(3);
         t.style.zIndex = String(Math.round(lerp(depth, 1, ui) * 100));

@@ -215,6 +215,13 @@
   .hero {
     min-height: 620px;
   }
+  /* A touch less zoom than a full-height crop: the photo ends in the dark shade near the foot. */
+  .media {
+    bottom: 12%;
+    /* only the last tenth softens, inside the dark shade, so no edge shows */
+    -webkit-mask-image: linear-gradient(180deg, #000 90%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 90%, transparent 100%);
+  }
   .photo {
     /* centre the face on narrow screens */
     object-position: 26% 40%;

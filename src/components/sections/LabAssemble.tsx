@@ -93,7 +93,7 @@ export function LabAssemble({ phrase }: { phrase: string }) {
         scrollTrigger: {
           trigger: root.current,
           start: "top top",
-          end: () => `+=${window.innerHeight * 7.5}`,
+          end: () => `+=${window.innerHeight * 7}`,
           pin: true,
           scrub: 1.5,
           anticipatePin: 1,
@@ -143,18 +143,18 @@ export function LabAssemble({ phrase }: { phrase: string }) {
         const toCentreY = () => stage.offsetHeight / 2 - (el.offsetTop + el.offsetHeight / 2);
         tl.fromTo(el, { x: toCentreX, y: toCentreY, rotation: fr * 2, scale: 0.05, opacity: 0 }, { x: 0, y: 0, rotation: 0, scale: 1, opacity: 1, duration: 0.26, ease: "power3.out" }, 0.114 + i * 0.025)
           // 4. leave to nowhere: towards the viewer and past the edges
-          .to(el, { x: sx(tx), y: sy(ty), rotation: tr, scale: ts, opacity: to, duration: 0.19, ease: "power2.in" }, 0.58 + i * 0.02);
+          .to(el, { x: sx(tx), y: sy(ty), rotation: tr, scale: ts, opacity: to, duration: 0.19, ease: "power2.in" }, 0.51 + i * 0.02);
       });
 
       // 3. Hold: snap, labels and the phrase
       tl.add(() => cue("snap"), 0.4)
         .fromTo(q("[data-snap]"), { scale: 0.6, opacity: 0.9 }, { scale: 1.5, opacity: 0, duration: 0.08, ease: "power2.out", immediateRender: false }, 0.39)
         .fromTo(q("[data-shadow]"), { scaleX: 0.2, opacity: 0 }, { scaleX: 1, opacity: 0.55, duration: 0.22 }, 0.16)
-        .to(q("[data-shadow]"), { scaleX: 0.2, opacity: 0, duration: 0.12 }, 0.58)
+        .to(q("[data-shadow]"), { scaleX: 0.2, opacity: 0, duration: 0.12 }, 0.51)
         .fromTo(q("[data-part-label]"), { opacity: 0 }, { opacity: 1, duration: 0.05, stagger: 0.02 }, 0.41)
-        .to(q("[data-part-label]"), { opacity: 0, duration: 0.04 }, 0.56)
+        .to(q("[data-part-label]"), { opacity: 0, duration: 0.04 }, 0.49)
         .fromTo(q("[data-word]"), { yPercent: 110 }, { yPercent: 0, duration: 0.08, stagger: 0.03, ease: "power3.out" }, 0.43)
-        .to(q("[data-word]"), { yPercent: -110, duration: 0.06, stagger: 0.02, ease: "power2.in" }, 0.55)
+        .to(q("[data-word]"), { yPercent: -110, duration: 0.06, stagger: 0.02, ease: "power2.in" }, 0.48)
         .fromTo(q("[data-guide]"), { scaleX: 0 }, { scaleX: 1, duration: 0.3 }, 0.114);
 
       // 5. The same tiles return and gather into a Ø in the emptied centre
@@ -166,10 +166,10 @@ export function LabAssemble({ phrase }: { phrase: string }) {
           t,
           { x: () => f.x * R(), y: () => f.y * R(), rotation: f.rot, scale: 0.2, opacity: 0 },
           { x: () => o.x * R(), y: () => o.y * R(), rotation: o.rot, scale: 1, opacity: 1, duration: 0.14, ease: "power3.out", immediateRender: false },
-          0.74 + (i / O_TILES) * 0.1,
+          0.67 + (i / O_TILES) * 0.1,
         );
       });
-      tl.fromTo(q("[data-o-caption]"), { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0.94);
+      tl.fromTo(q("[data-o-caption]"), { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0.87);
 
       // decorative float on inner layers while the scene is on screen
       const bobs = q("[data-bob]").map((b, i) =>

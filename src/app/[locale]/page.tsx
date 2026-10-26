@@ -23,7 +23,7 @@ import { isLocale } from "@/i18n/config";
 import { getMessages, pick } from "@/i18n/messages";
 
 // Order from the brief: 01 HERO → pause A → 02 → 03 → pause B → 04 → 05 → 06 → 07 → 08,
-// with the letters ring after the hero and the helix archive between 03 and pause B.
+// with the letters ring after the hero, the depth flight between 02 and 03 and the helix archive between 03 and pause B.
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
@@ -71,6 +71,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             "alt.stride",
           ])}
         />
+        <DepthFlight />
         <About
           t={pick(t, ["about.title", "about.eyebrow", "about.p1", "about.p2", "about.p3", "about.disclaimer", "hero.tagline", "alt.low"])}
         />
@@ -142,7 +143,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           ])}
         />
         <SphereLooks />
-        <DepthFlight />
         <Finale
           locale={locale}
           t={pick(t, ["end.heading", "end.subtitle", "end.concept", "end.credit", "end.fiction", "ui.top", "legal.imprint", "legal.privacy"])}
