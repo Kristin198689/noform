@@ -95,28 +95,15 @@
   opacity: 0.5;
 }
 .floater {
-  width: min(66vw, 940px);
+  width: min(62vw, 860px);
   aspect-ratio: 3 / 2;
   transform-style: preserve-3d;
   will-change: transform, opacity;
 }
-/* the centred renders carry wide transparent margins: enlarge so the visor reads as large as in v1 */
-.floaterCentred {
-  width: min(98vw, 1360px);
-}
-@media (max-width: 767px) {
-  .floaterCentred {
-    width: 150vw;
-  }
-}
-.bob,
-.hover {
+.bob {
   position: relative;
   width: 100%;
   height: 100%;
-}
-.bob {
-  will-change: filter;
 }
 .angle {
   position: absolute;
@@ -145,7 +132,7 @@
   width: 100%;
   aspect-ratio: auto;
 }
-.float[data-mode="list"] .hover {
+.float[data-mode="list"] .bob {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
@@ -161,7 +148,7 @@
 
 @media (max-width: 767px) {
   .floater {
-    width: 100vw;
+    width: 92vw;
   }
   .shadow {
     width: 70vw;
@@ -170,7 +157,7 @@
   .br {
     display: none;
   }
-  .float[data-mode="list"] .hover {
+  .float[data-mode="list"] .bob {
     grid-template-columns: 1fr;
   }
 }

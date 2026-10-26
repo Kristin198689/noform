@@ -6,8 +6,6 @@ import { gsap, MOTION_OK, useGSAP } from "@/lib/gsap";
 import { cue } from "@/lib/sound";
 import type { Messages } from "@/i18n/messages";
 import { VisorFloat } from "./VisorFloat";
-import { VisorFloatV1 } from "./VisorFloatV1";
-import { useVisorVariant } from "@/lib/useVisorVariant";
 import styles from "./Visor.module.css";
 
 type Strings = Pick<
@@ -42,8 +40,6 @@ const H_LINES = [77, 385, 695, 930];
 
 export function Visor({ t }: { t: Strings }) {
   const root = useRef<HTMLElement>(null);
-  // Temporary: ?visor=v1 renders the first implementation for side-by-side review.
-  const variant = useVisorVariant();
 
   useGSAP(
     () => {
@@ -151,7 +147,7 @@ export function Visor({ t }: { t: Strings }) {
           <span className={styles.bottomRule} />
         </div>
       </div>
-      {variant === "v1" ? <VisorFloatV1 label={t["visor.title"]} /> : <VisorFloat label={t["visor.title"]} />}
+      <VisorFloat label={t["visor.title"]} />
     </section>
   );
 }

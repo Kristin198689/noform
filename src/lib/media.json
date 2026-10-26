@@ -125,35 +125,5 @@
       960,
       1024
     ]
-  },
-  "visor-float-01": {
-    "width": 1800,
-    "height": 1200,
-    "alpha": true,
-    "widths": [
-      480,
-      960,
-      1536
-    ]
-  },
-  "visor-float-02": {
-    "width": 1800,
-    "height": 1200,
-    "alpha": true,
-    "widths": [
-      480,
-      960,
-      1536
-    ]
-  },
-  "visor-float-03": {
-    "width": 1800,
-    "height": 1200,
-    "alpha": true,
-    "widths": [
-      480,
-      960,
-      1536
-    ]
   }
 }
