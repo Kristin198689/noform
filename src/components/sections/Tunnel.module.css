@@ -1,0 +1,103 @@
+.tunnel {
+  position: relative;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  background: #050505;
+  color: var(--white);
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ring,
+.ringPink {
+  fill: none;
+  stroke: var(--white);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+.ring use,
+.ringPink use {
+  vector-effect: non-scaling-stroke;
+}
+.ringPink {
+  stroke: var(--pink);
+}
+
+.frame {
+  fill: none;
+  stroke: rgb(246 245 242 / 0.35);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.vanish {
+  stroke: rgb(246 245 242 / 0.4);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.25;
+}
+
+.center {
+  stroke: var(--pink);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.tl,
+.tr,
+.bl,
+.br {
+  position: absolute;
+  z-index: 1;
+  margin: 0;
+  white-space: nowrap;
+}
+.tl {
+  left: var(--gutter);
+  top: calc(var(--chrome-h) + 12px);
+}
+.tr {
+  right: var(--gutter);
+  top: calc(var(--chrome-h) + 12px);
+}
+.bl {
+  left: var(--gutter);
+  bottom: 28px;
+  font-variant-numeric: tabular-nums;
+}
+.br {
+  right: var(--gutter);
+  bottom: 28px;
+  color: rgb(246 245 242 / 0.7);
+}
+
+.title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  z-index: 1;
+  width: min(92vw, 1100px);
+  margin: 0 auto;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  text-align: center;
+  text-wrap: balance;
+  font-size: clamp(2rem, 1rem + 4.4vw, 5.4rem);
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+/* Reduced motion / no JS: one calm composition with both phrases */
+
+
+@media (max-width: 767px) {
+  .br {
+    display: none;
+  }
+}

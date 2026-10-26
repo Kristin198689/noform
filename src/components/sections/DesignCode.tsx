@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { Img } from "@/components/Img";
 import { VisorOutline } from "@/components/VisorOutline";
 import { gsap, MOTION_OK, useGSAP } from "@/lib/gsap";
+import { cue } from "@/lib/sound";
 import { hoodie } from "@/lib/hoodie";
 import { WORDMARK_PATH } from "@/lib/wordmark";
 import type { Messages } from "@/i18n/messages";
@@ -64,6 +65,7 @@ export function DesignCode({ t }: { t: Strings }) {
               duration: 1.4,
               ease: "power2.inOut",
               stagger: 0.06,
+              onStart: () => cue("pulse"),
               scrollTrigger: { trigger: study, start: "top 78%", once: true },
             },
           );
@@ -198,31 +200,57 @@ export function DesignCode({ t }: { t: Strings }) {
         </article>
       </div>
 
-      <div className={styles.bottom}>
-        <div className={styles.copyCols}>
-          <p className="reading">
-            <span className={styles.dash} aria-hidden="true" />
-            {t["code.p1"]}
-          </p>
-          <p className="reading">
-            <span className={styles.dash} aria-hidden="true" />
-            {t["code.p2"]}
-          </p>
-        </div>
-        <figure className={styles.thumb}>
+      {/* Editorial close: photograph at half width, the thesis beside it */}
+      <div className={styles.editorial} data-editorial>
+        <figure className={styles.photoBlock}>
           <span className="cross" style={{ left: 0, top: 0 }} aria-hidden="true" />
           <span className="cross" style={{ left: "100%", top: 0 }} aria-hidden="true" />
           <span className="cross" style={{ left: 0, top: "100%" }} aria-hidden="true" />
           <span className="cross" style={{ left: "100%", top: "100%" }} aria-hidden="true" />
-          <Img id="look-03" alt={t["alt.overhead"]} sizes="(max-width: 767px) 60vw, 240px" className={styles.thumbImg} />
-          <figcaption className="micro" aria-hidden="true">
-            CAMPAIGN / FRAME <span className="pink">005</span>
+          <div className={styles.photoClip} data-wipe>
+            <div className={styles.photoInner} data-speed="0.7">
+              <Img id="look-03" alt={t["alt.overhead"]} sizes="(max-width: 767px) 92vw, 46vw" className={styles.photo} />
+            </div>
+          </div>
+          <figcaption className={`micro ${styles.photoCaption}`} aria-hidden="true">
+            <span>
+              CAMPAIGN / FRAME <span className="pink">005</span>
+            </span>
+            <span className={styles.captionRule} data-guide-h />
+            <span>OVERHEAD / FORM STUDY</span>
           </figcaption>
+          <p className={`deco ${styles.photoVertical}`} aria-hidden="true">NØFORM / DESIGN CODE / 2026</p>
         </figure>
-        <p className={styles.statement}>
-          {t["code.statement"]}
-          <span className={styles.statementRule} aria-hidden="true" />
-        </p>
+
+        <div className={styles.textBlock}>
+          <p className={`micro ${styles.kicker}`} aria-hidden="true">
+            <span className="pink">05</span> / THESIS
+            <span className={styles.kickerRule} data-guide-h />
+          </p>
+          <p className={`display ${styles.thesis}`} data-split>
+            {t["code.statement"]}
+          </p>
+          <span className={styles.thesisRule} data-guide-h aria-hidden="true" />
+          <div className={styles.copyCols}>
+            <div>
+              <p className="reading" data-reveal-text>
+                {t["code.p1"]}
+              </p>
+            </div>
+            <div>
+              <p className="reading" data-reveal-text>
+                {t["code.p2"]}
+              </p>
+            </div>
+          </div>
+          <p className={`deco ${styles.codesRow}`} aria-hidden="true">
+            <span>OPEN SILHOUETTE</span>
+            <span>MONOCHROME</span>
+            <span>
+              TRACE OF <span className="pink">PINK</span>
+            </span>
+          </p>
+        </div>
       </div>
     </section>
   );

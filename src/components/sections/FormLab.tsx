@@ -2,9 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap, MOTION_OK, useGSAP } from "@/lib/gsap";
+import { cue } from "@/lib/sound";
 import { hoodie, type HoodieGeometry } from "@/lib/hoodie";
 import { Wordmark } from "@/components/Wordmark";
 import type { Messages } from "@/i18n/messages";
+import { LabAssemble } from "./LabAssemble";
 import styles from "./FormLab.module.css";
 
 type Strings = Pick<
@@ -20,6 +22,7 @@ type Strings = Pick<
   | "lab.sleeve"
   | "lab.silhouette"
   | "lab.note"
+  | "lab.assembled"
 >;
 
 const START = 72;
@@ -97,10 +100,30 @@ export function FormLab({ t }: { t: Strings }) {
     };
   }, [value, draw]);
 
+  const touched = useRef(false);
+
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
+        // A one-time demonstration of the morph, unless the reader already moved the slider.
+        gsap.fromTo(
+          proxy.current,
+          { v: 0.08, g: 0.08 },
+          {
+            v: START / 100,
+            g: START / 100,
+            duration: 2.4,
+            ease: "power2.inOut",
+            delay: 0.4,
+            onUpdate: draw,
+            immediateRender: false,
+            scrollTrigger: { trigger: "[data-figure]", start: "top 70%", once: true },
+            onStart: () => {
+              if (touched.current) gsap.killTweensOf(proxy.current);
+            },
+          },
+        );
         const tl = gsap.timeline({ scrollTrigger: { trigger: "[data-figure]", start: "top 75%", once: true } });
         tl.fromTo("[data-lab-draw]", { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut", stagger: 0.05 })
           .fromTo("[data-lab-mark]", { opacity: 0 }, { opacity: 1, duration: 0.5, stagger: 0.08 }, 1.1)
@@ -114,15 +137,18 @@ export function FormLab({ t }: { t: Strings }) {
   const initial = hoodie(START / 100);
 
   return (
-    <section id="lab" data-section ref={root} className={styles.lab} aria-labelledby="lab-title">
+    <section id="lab" data-section data-sheet data-theme="light" ref={root} className={styles.lab} aria-labelledby="lab-title">
       <div className={styles.bar}>
         <p className="micro">07 / {t["lab.title"]}</p>
         <span className={styles.barRule} data-lab-guide aria-hidden="true" />
       </div>
 
+      {/* Stage 1: assemble the outfit. Stage 2 below: the volume study with the slider. */}
+      <LabAssemble phrase={t["lab.assembled"]} />
+
       <div className={styles.layout}>
         <div className={styles.intro}>
-          <h2 id="lab-title" className={`display ${styles.heading}`}>
+          <h2 id="lab-title" className={`display ${styles.heading}`} data-split>
             {(t["lab.heading"].match(/[^.]+\.?/g) ?? [t["lab.heading"]]).map((line) => (
               <span key={line} className={styles.headingLine}>
                 {line.trim()}
@@ -238,7 +264,12 @@ export function FormLab({ t }: { t: Strings }) {
             value={value}
             aria-valuetext={`${t["lab.volume"]} ${value} / 100`}
             aria-describedby="lab-note"
-            onChange={(e) => setValue(Number(e.currentTarget.value))}
+            onChange={(e) => {
+              touched.current = true;
+              cue("lab", Number(e.currentTarget.value) / 100);
+              root.current?.setAttribute("data-touched", "true");
+              setValue(Number(e.currentTarget.value));
+            }}
             style={{ "--fill": `${value}%` } as React.CSSProperties}
           />
           <span className="micro" aria-hidden="true">{t["lab.oversized"]}</span>

@@ -24,14 +24,6 @@ export function PauseB({ t }: { t: Pick<Messages, "pauseB.title"> }) {
             scrollTrigger: { trigger: root.current, start: "top 80%", end: "center 50%", scrub: 0.5 },
           },
         );
-        gsap.from("[data-fade]", {
-          opacity: 0,
-          y: 10,
-          duration: 0.9,
-          ease: "power3.out",
-          stagger: 0.08,
-          scrollTrigger: { trigger: root.current, start: "top 60%", once: true },
-        });
       });
       return () => mm.revert();
     },
@@ -57,7 +49,7 @@ export function PauseB({ t }: { t: Pick<Messages, "pauseB.title"> }) {
         <p className={`micro ${styles.curve}`} aria-hidden="true">CONTINUOUS CURVE</p>
       </div>
 
-      <h2 id="perspective-title" className={`display ${styles.title}`} data-fade>
+      <h2 id="perspective-title" className={`display ${styles.title}`} data-split="chars">
         {t["pauseB.title"]}
       </h2>
     </section>

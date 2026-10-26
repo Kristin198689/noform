@@ -1,0 +1,176 @@
+.float {
+  position: relative;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  background:
+    radial-gradient(48% 40% at 50% 54%, rgb(246 245 242 / 0.09), transparent 70%),
+    #070707;
+  color: var(--white);
+}
+.float :global(.cross) {
+  color: rgb(246 245 242 / 0.4);
+}
+
+.guides {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.h {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line-on-black);
+  transform-origin: left;
+}
+.v {
+  position: absolute;
+  left: 50%;
+  top: 8%;
+  bottom: 8%;
+  width: 1px;
+  background: var(--line-on-black);
+  transform-origin: top;
+}
+.orbit {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 30%;
+  width: 88%;
+  height: 40%;
+  overflow: visible;
+}
+.orbit ellipse {
+  fill: none;
+  stroke: rgb(246 245 242 / 0.22);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.tl,
+.tr,
+.bl,
+.br {
+  position: absolute;
+  margin: 0;
+  white-space: nowrap;
+}
+.tl {
+  left: var(--gutter);
+  top: calc(var(--chrome-h) + 16px);
+}
+.tr {
+  right: var(--gutter);
+  top: calc(var(--chrome-h) + 16px);
+}
+.bl {
+  left: var(--gutter);
+  bottom: 28px;
+}
+.br {
+  right: var(--gutter);
+  bottom: 28px;
+  color: rgb(246 245 242 / 0.75);
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  perspective: 1200px;
+}
+.shadow {
+  position: absolute;
+  left: 50%;
+  top: 72%;
+  width: min(44vw, 520px);
+  height: 34px;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.85), transparent);
+  opacity: 0.5;
+}
+.floater {
+  width: min(66vw, 940px);
+  aspect-ratio: 3 / 2;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+/* the centred renders carry wide transparent margins: enlarge so the visor reads as large as in v1 */
+.floaterCentred {
+  width: min(98vw, 1360px);
+}
+@media (max-width: 767px) {
+  .floaterCentred {
+    width: 150vw;
+  }
+}
+.bob,
+.hover {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.bob {
+  will-change: filter;
+}
+.angle {
+  position: absolute;
+  inset: 0;
+}
+.angle img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 40px 40px rgb(0 0 0 / 0.55));
+  -webkit-user-drag: none;
+}
+
+/* Reduced motion / no JS: a calm row of the three angles */
+.float[data-mode="list"] {
+  height: auto;
+  min-height: 0;
+  padding: calc(var(--chrome-h) + 64px) var(--gutter) 88px;
+}
+.float[data-mode="list"] .stage {
+  position: relative;
+  display: block;
+  perspective: none;
+}
+.float[data-mode="list"] .floater {
+  width: 100%;
+  aspect-ratio: auto;
+}
+.float[data-mode="list"] .hover {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.float[data-mode="list"] .angle {
+  position: relative;
+  aspect-ratio: 3 / 2;
+}
+.float[data-mode="list"] .shadow,
+.float[data-mode="list"] .orbit {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .floater {
+    width: 100vw;
+  }
+  .shadow {
+    width: 70vw;
+    top: 66%;
+  }
+  .br {
+    display: none;
+  }
+  .float[data-mode="list"] .hover {
+    grid-template-columns: 1fr;
+  }
+}

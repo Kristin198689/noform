@@ -19,13 +19,14 @@ function lines(text: string) {
 
 export function Hero({ t }: { t: HeroStrings }) {
   return (
-    <section id="hero" data-section className={styles.hero} aria-labelledby="hero-title">
-      <div className={styles.media}>
+    <section id="hero" data-section data-theme="photo" className={styles.hero} aria-labelledby="hero-title">
+      <div className={styles.media} data-hero-photo data-hero-photo-tilt>
         <Img id="hero" alt={t["alt.hero"]} sizes="100vw" priority className={styles.photo} />
       </div>
       <div className={styles.shade} aria-hidden="true" />
+      <div className={styles.dim} data-hero-dim aria-hidden="true" />
 
-      <div className={styles.brand}>
+      <div className={styles.brand} data-hero-brand data-hero-tilt>
         <span className={`capsule ${styles.origin}`} aria-hidden="true">ORIGIN</span>
         <h1 id="hero-title" className={styles.title}>
           <Wordmark className={styles.wordmark} label="NØFORM" />

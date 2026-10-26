@@ -35,8 +35,8 @@ export function PauseA({ t }: { t: Strings }) {
   );
 
   return (
-    <section id="reset" data-section className={styles.pause} ref={root} aria-labelledby="reset-title">
-      <div className={styles.grid} aria-hidden="true" />
+    <section id="reset" data-section data-sheet data-theme="light" className={styles.pause} ref={root} aria-labelledby="reset-title">
+      <div className={styles.grid} data-speed="1.2" aria-hidden="true" />
       <p className={`micro ${styles.code}`} aria-hidden="true">TRANSITION / 01</p>
       <p className={`micro ${styles.independent}`}>{t["hero.independent"]}</p>
       <h2 id="reset-title" className={`display ${styles.title}`}>

@@ -12,7 +12,7 @@
 /* Quiet coordinate grid: 1px black at low opacity */
 .grid {
   position: absolute;
-  inset: 0;
+  inset: -12% 0;
   background-image:
     linear-gradient(to right, var(--line-on-gray) 1px, transparent 1px),
     linear-gradient(to bottom, var(--line-on-gray) 1px, transparent 1px);
@@ -102,5 +102,16 @@
   .plus {
     right: 12%;
     top: 26%;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .plus {
+    animation: spin 9s linear infinite;
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }

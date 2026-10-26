@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { TickSound } from "@/lib/sound";
-import { ScrollTrigger } from "@/lib/gsap";
+import { SoundEngine, type Cue } from "@/lib/sound";
+import { refreshInOrder, ScrollTrigger } from "@/lib/gsap";
 
 type SiteContextValue = {
   soundOn: boolean;
@@ -22,20 +22,43 @@ export function useSite(): SiteContextValue {
 export function SiteProvider({ children }: { children: React.ReactNode }) {
   const [soundOn, setSoundOn] = useState(false);
   const [section, setSection] = useState("hero");
-  const sound = useRef<TickSound | null>(null);
+  const sound = useRef<SoundEngine | null>(null);
   const soundOnRef = useRef(false);
 
   const toggleSound = useCallback(() => {
-    sound.current ??= new TickSound();
+    sound.current ??= new SoundEngine();
     const next = !soundOnRef.current;
     soundOnRef.current = next;
-    if (next) sound.current.enable();
-    else sound.current.disable();
+    if (next) {
+      sound.current.enable();
+      // greet with the hero cue if the reader is still at the top
+      if (window.scrollY < window.innerHeight * 0.6) window.setTimeout(() => sound.current?.play("chime"), 120);
+    } else sound.current.disable();
     setSoundOn(next);
   }, []);
 
   const tick = useCallback(() => {
-    if (soundOnRef.current) sound.current?.tick();
+    if (soundOnRef.current) sound.current?.play("tick");
+  }, []);
+
+  // Scenes emit cues as events; nothing plays unless the reader switched sound on.
+  useEffect(() => {
+    const onCue = (e: Event) => {
+      const { name, intensity } = (e as CustomEvent<{ name: Cue; intensity?: number }>).detail;
+      if (soundOnRef.current) sound.current?.play(name, intensity);
+    };
+    const onAmbient = (e: Event) => {
+      const { level } = (e as CustomEvent<{ level: number | null }>).detail;
+      if (!soundOnRef.current || !sound.current) return;
+      if (level === null) sound.current.stopAmbient();
+      else sound.current.setAmbient(level);
+    };
+    window.addEventListener("noform:cue", onCue);
+    window.addEventListener("noform:ambient", onAmbient);
+    return () => {
+      window.removeEventListener("noform:cue", onCue);
+      window.removeEventListener("noform:ambient", onAmbient);
+    };
   }, []);
 
   // Silence when the tab is hidden.
@@ -87,7 +110,7 @@ export function SiteProvider({ children }: { children: React.ReactNode }) {
     window.addEventListener("keydown", stop, opts);
     const timer = window.setTimeout(stop, 5000);
     ScrollTrigger.addEventListener("refresh", onRefresh);
-    void document.fonts.ready.then(() => ScrollTrigger.refresh());
+    void document.fonts.ready.then(() => refreshInOrder());
     return () => {
       window.clearTimeout(timer);
       window.removeEventListener("wheel", stop);

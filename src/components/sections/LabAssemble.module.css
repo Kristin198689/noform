@@ -1,0 +1,152 @@
+.assemble {
+  margin-inline: calc(-1 * var(--gutter));
+  position: relative;
+  height: 100svh;
+  min-height: 600px;
+  overflow: hidden;
+  background: var(--gray);
+  color: var(--black);
+}
+
+.guide {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line-on-gray);
+  transform: scaleX(0.2);
+  transform-origin: left;
+}
+.axis {
+  position: absolute;
+  left: 50%;
+  top: 6%;
+  bottom: 6%;
+  border-left: 1px dashed rgb(8 8 8 / 0.2);
+}
+
+.code,
+.codeR {
+  position: absolute;
+  top: calc(var(--chrome-h) + 12px);
+  margin: 0;
+  white-space: nowrap;
+}
+.code {
+  left: var(--gutter);
+}
+.codeR {
+  right: var(--gutter);
+  color: rgb(8 8 8 / 0.7);
+}
+
+/* The assembled outfit lives on a 1100 × 1500 stage, sized to fit the viewport */
+.stage {
+  position: absolute;
+  left: 50%;
+  top: 53%;
+  height: min(82svh, calc(84vw * 1500 / 1100));
+  aspect-ratio: 1100 / 1500;
+  translate: -50% -50%;
+}
+
+.part {
+  position: absolute;
+  will-change: transform;
+}
+.part img {
+  width: 100%;
+  height: auto;
+  -webkit-user-drag: none;
+}
+.part[data-part="hoodie"] {
+  z-index: 2;
+}
+.part[data-part="cargo"] {
+  z-index: 1;
+}
+.part[data-part="visor"] {
+  z-index: 3;
+}
+
+/* labels live on their own layer, unscaled, beside each piece's apart position */
+.partLabel {
+  position: absolute;
+  z-index: 6;
+  white-space: nowrap;
+}
+.partLabel[data-for="hoodie"] {
+  left: 14%;
+  top: 0;
+}
+.partLabel[data-for="cargo"] {
+  right: 12%;
+  bottom: -1%;
+}
+.partLabel[data-for="visor"] {
+  left: 40%;
+  top: 2%;
+}
+
+.shadow {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -2%;
+  height: 5%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(8 8 8 / 0.5), transparent);
+}
+.snap {
+  position: absolute;
+  left: 58%;
+  top: 22%;
+  width: 18%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border: 1px solid var(--pink);
+  border-radius: 50%;
+  opacity: 0;
+  z-index: 4;
+}
+
+.phrase {
+  position: absolute;
+  left: var(--gutter);
+  bottom: 8%;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-size: clamp(1.8rem, 1rem + 3vw, 4rem);
+  line-height: 1;
+}
+.mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+.mask > span {
+  display: block;
+}
+
+/* Reduced motion / no JS: the assembled outfit, still, with the phrase */
+.assemble[data-mode="list"] .guide {
+  transform: none;
+}
+
+@media (max-width: 767px) {
+  .codeR {
+    display: none;
+  }
+  .stage {
+    top: 47%;
+    height: min(64svh, calc(78vw * 1500 / 1100));
+  }
+  .phrase {
+    bottom: 5%;
+  }
+  .partLabel[data-for="visor"] {
+    top: 12%;
+  }
+}

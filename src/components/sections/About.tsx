@@ -52,7 +52,9 @@ export function About({ t }: { t: Strings }) {
       </div>
 
       <div className={styles.photoCol}>
-        <Img id="look-01" alt={t["alt.low"]} sizes="(max-width: 899px) 100vw, 58vw" className={styles.photo} />
+        <div className={styles.photoMove} data-wipe data-settle>
+          <Img id="look-01" alt={t["alt.low"]} sizes="(max-width: 899px) 100vw, 58vw" className={styles.photo} />
+        </div>
 
         <div className={styles.overlay} aria-hidden="true">
           <span className={styles.gH} style={{ top: "12%" }} data-hline />
@@ -90,9 +92,13 @@ export function About({ t }: { t: Strings }) {
           </div>
 
           <div className={styles.split}>
-            <Wordmark className={styles.splitNo} viewBox={WORDMARK_NO_VIEWBOX} />
+            <div data-drift-x="-6">
+              <Wordmark className={styles.splitNo} viewBox={WORDMARK_NO_VIEWBOX} />
+            </div>
             <span className={`capsule ${styles.studio}`}>STUDIO 001</span>
-            <Wordmark className={styles.splitForm} viewBox={WORDMARK_FORM_VIEWBOX} />
+            <div data-drift-x="5">
+              <Wordmark className={styles.splitForm} viewBox={WORDMARK_FORM_VIEWBOX} />
+            </div>
           </div>
 
           <p className={`deco ${styles.vertical}`}>UNRESTRICTED SILHOUETTES / INDEPENDENT EXPRESSION</p>
@@ -121,7 +127,7 @@ export function About({ t }: { t: Strings }) {
           {t["about.eyebrow"]}
           <span className={styles.eyebrowRule} aria-hidden="true" />
         </p>
-        <h2 id="about-title" className={`display ${styles.title}`} data-reveal>
+        <h2 id="about-title" className={`display ${styles.title}`} data-split>
           <PinkStop text={t["about.title"]} />
         </h2>
         <div className={`reading ${styles.copy}`}>

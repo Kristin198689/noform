@@ -11,7 +11,7 @@
   z-index: 3;
   top: 0;
   left: 0;
-  right: calc(var(--gutter) + 230px);
+  right: calc(var(--gutter) + 440px);
   height: var(--chrome-h);
   display: flex;
   align-items: center;
@@ -40,11 +40,18 @@
   overflow: hidden;
   background: #9c9c9a;
 }
+/* anchored to the top edge: the hood and head never leave the frame */
+.photoMove {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 0%;
+  will-change: transform;
+}
 .photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 30%;
+  object-position: 50% 0%;
 }
 
 .overlay {

@@ -14,7 +14,7 @@
   align-items: center;
   gap: 24px;
   height: var(--chrome-h);
-  margin-right: 230px;
+  margin-right: 440px;
 }
 .bar p {
   margin: 0;
@@ -406,5 +406,20 @@
   }
   .figure {
     width: min(100%, 66svh);
+  }
+}
+
+/* Until the reader touches it, the thumb invites a drag */
+@media (prefers-reduced-motion: no-preference) {
+  .lab:not([data-touched]) .range::-webkit-slider-thumb {
+    animation: invite 1.8s var(--ease-out) infinite;
+  }
+}
+@keyframes invite {
+  0% {
+    box-shadow: 0 0 0 0 rgb(255 22 138 / 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgb(255 22 138 / 0);
   }
 }

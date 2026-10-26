@@ -10,8 +10,17 @@
 
 .media {
   position: absolute;
-  inset: 0;
+  inset: -24px;
   z-index: -2;
+  will-change: transform;
+}
+.dim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--black);
+  opacity: 0;
+  pointer-events: none;
 }
 .photo {
   width: 100%;
@@ -274,5 +283,24 @@
   }
   .tagline {
     top: calc(var(--chrome-h) + 12px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tagRule {
+    animation: breathe 2.8s ease-in-out infinite alternate;
+  }
+  .tagRule:last-child {
+    animation-delay: -1.4s;
+  }
+}
+@keyframes breathe {
+  from {
+    transform: scaleY(0.35);
+    opacity: 0.5;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
   }
 }

@@ -1,11 +1,13 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap, MOTION_OK, useGSAP } from "@/lib/gsap";
+import { gsap, MOTION_OK, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { cue } from "@/lib/sound";
 import { studioUrl } from "@/lib/site";
 import { WORDMARK_PATH, WORDMARK_VIEWBOX } from "@/lib/wordmark";
 import type { Locale } from "@/i18n/config";
 import type { Messages } from "@/i18n/messages";
+import { LiquidMirror } from "./LiquidMirror";
 import styles from "./Finale.module.css";
 
 type Strings = Pick<
@@ -33,6 +35,7 @@ export function Finale({ t, locale }: { t: Strings; locale: Locale }) {
 
       const mm = gsap.matchMedia();
       mm.add(MOTION_OK, () => {
+        ScrollTrigger.create({ trigger: root.current, start: "top 55%", onEnter: () => cue("final") });
         const tl = gsap.timeline({ scrollTrigger: { trigger: root.current, start: "top 65%", once: true } });
         // Guides converge towards the wordmark, then the contour draws once.
         tl.fromTo("[data-converge-l]", { scaleX: 0 }, { scaleX: 1, duration: 1.1, ease: "power3.out" })
@@ -61,7 +64,7 @@ export function Finale({ t, locale }: { t: Strings; locale: Locale }) {
       <p className={`micro ${styles.top}`}>08 / END OF STUDY</p>
 
       <div className={styles.headline}>
-        <h2 id="end-title" className={styles.heading} data-fade>
+        <h2 id="end-title" className={styles.heading} data-split="chars">
           {t["end.heading"]}
         </h2>
         <p className={`micro ${styles.subtitle}`} data-fade>
@@ -80,36 +83,40 @@ export function Finale({ t, locale }: { t: Strings; locale: Locale }) {
           <span data-converge-r />
         </span>
         <span className="cross" style={{ left: "var(--gutter)", top: "calc(2.2em + 0px)" }} aria-hidden="true" />
-        <svg
-          className={styles.mark}
-          viewBox={WORDMARK_VIEWBOX}
-          role="img"
-          aria-label="NØFORM"
-          onPointerEnter={(e) => {
-            if (e.pointerType === "mouse") pinkRun.current?.();
-          }}
-        >
-          <path
-            data-outline
-            d={WORDMARK_PATH}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.3"
-            vectorEffect="non-scaling-stroke"
-            pathLength={1}
-            strokeDasharray="1"
-          />
-          <path
-            data-run
-            className={styles.run}
-            d={WORDMARK_PATH}
-            fill="none"
-            strokeWidth="2.2"
-            vectorEffect="non-scaling-stroke"
-            pathLength={1}
-            strokeDasharray="0.14 0.86"
-          />
-        </svg>
+        <div className={styles.mirrorStage}>
+          <LiquidMirror className={styles.mirror} />
+          <svg
+            data-speed="-0.6"
+            className={styles.mark}
+            viewBox={WORDMARK_VIEWBOX}
+            role="img"
+            aria-label="NØFORM"
+            onPointerEnter={(e) => {
+              if (e.pointerType === "mouse") pinkRun.current?.();
+            }}
+          >
+            <path
+              data-outline
+              d={WORDMARK_PATH}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.3"
+              vectorEffect="non-scaling-stroke"
+              pathLength={1}
+              strokeDasharray="1"
+            />
+            <path
+              data-run
+              className={styles.run}
+              d={WORDMARK_PATH}
+              fill="none"
+              strokeWidth="2.2"
+              vectorEffect="non-scaling-stroke"
+              pathLength={1}
+              strokeDasharray="0.14 0.86"
+            />
+          </svg>
+        </div>
         <span className={styles.lineBottom} aria-hidden="true">
           <span data-converge-l />
           <span data-converge-r />

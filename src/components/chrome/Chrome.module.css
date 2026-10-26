@@ -1,27 +1,112 @@
-/* One fixed navigation for the whole page. Difference blending keeps it legible on black and on the gray pauses. */
+/* One fixed header in the technical idiom: text, straight separators, a hairline — no plates.
+   Colour follows the surface under it; over photographs a faint top vignette keeps it legible.
+   It slides away while reading downwards and returns on the first upward scroll. */
 .top {
   position: fixed;
   top: 0;
+  left: 0;
   right: 0;
   z-index: 40;
   display: flex;
   align-items: center;
-  gap: 18px;
+  justify-content: flex-end;
   height: var(--chrome-h);
   padding-inline: var(--gutter);
   color: var(--white);
-  mix-blend-mode: difference;
+  pointer-events: none;
+  transition: transform 360ms var(--ease-out), opacity 240ms ease, color 240ms ease;
+}
+.top::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 -28px;
+  background: linear-gradient(180deg, rgb(8 8 8 / 0.5), rgb(8 8 8 / 0));
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+  z-index: -1;
+}
+.top[data-theme="photo"]::before {
+  opacity: 1;
+}
+.top[data-theme="photo"] {
+  text-shadow: 0 1px 10px rgb(0 0 0 / 0.45);
+}
+.top[data-theme="light"] {
+  color: var(--black);
+}
+.top[data-hidden="true"] {
+  transform: translateY(-110%);
+  opacity: 0;
+  transition-duration: 300ms, 200ms, 240ms;
+}
+
+.group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  pointer-events: auto;
+}
+.group::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 4px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.32;
+}
+.sep {
+  width: 1px;
+  height: 14px;
+  background: currentColor;
+  opacity: 0.4;
 }
 
 .indexButton,
 .closeButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
   min-height: 44px;
-  padding-inline: 4px;
+  padding-inline: 6px;
   font-family: var(--micro);
   font-size: 13px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+.bracket {
+  display: inline-flex;
+  gap: 0.35em;
+  letter-spacing: 0;
+}
+.bracket > span {
+  display: inline-block;
+  transition: transform 260ms var(--ease-out), color 200ms ease;
+}
+.plus {
+  color: var(--pink);
+}
+@media (hover: hover) and (pointer: fine) {
+  .indexButton:hover .bracket > span:first-child {
+    transform: translateX(-3px);
+  }
+  .indexButton:hover .bracket > span:last-child {
+    transform: translateX(3px);
+  }
+  .indexButton:hover .plus {
+    transform: rotate(90deg);
+  }
+}
+.indexButton:active .bracket {
+  transform: scale(0.96);
+}
+.indexButton[aria-expanded="true"] .plus {
+  transform: rotate(45deg);
 }
 
 .langCompact {
@@ -38,89 +123,94 @@
 }
 
 .langSep {
-  opacity: 0.45;
-  padding-inline: 2px;
+  opacity: 0.4;
+  padding-inline: 1px;
 }
 
 .lang {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 30px;
+  min-width: 32px;
   min-height: 44px;
   text-decoration: none;
-  opacity: 0.6;
+  opacity: 0.62;
   transition: opacity 160ms ease;
+}
+.lang::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 9px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transition: transform 260ms var(--ease-out);
 }
 .lang[aria-current="true"] {
   opacity: 1;
-  text-decoration: underline;
-  text-underline-offset: 6px;
-  text-decoration-thickness: 1px;
 }
-@media (hover: hover) {
+.lang[aria-current="true"]::after {
+  transform: scaleX(1);
+}
+@media (hover: hover) and (pointer: fine) {
   .lang:hover {
     opacity: 1;
+  }
+  .lang:hover::after {
+    transform: scaleX(1);
   }
 }
 
 .sound {
-  position: fixed;
-  right: var(--gutter);
-  bottom: max(12px, env(safe-area-inset-bottom));
-  z-index: 40;
   display: inline-flex;
   align-items: center;
   gap: 10px;
   min-height: 44px;
-  padding-inline: 4px;
+  padding-inline: 6px;
   font-family: var(--micro);
   font-size: 12px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--white);
-  mix-blend-mode: difference;
+  white-space: nowrap;
+}
+.sound:active {
+  transform: scale(0.97);
 }
 
 .soundDot {
-  width: 7px;
-  height: 7px;
+  position: relative;
+  width: 8px;
+  height: 8px;
   border: 1px solid currentColor;
   border-radius: 50%;
-  transition: background-color 160ms ease;
+  transition: background-color 160ms ease, border-color 160ms ease;
 }
 .soundDot[data-on="true"] {
-  background: currentColor;
+  background: var(--pink);
+  border-color: var(--pink);
+}
+.soundDot[data-on="true"]::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 1px solid var(--pink);
+  border-radius: 50%;
+  animation: soundPulse 1.6s var(--ease-out) infinite;
+}
+@keyframes soundPulse {
+  from {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
 }
 
-/* Phones: the bottom edge belongs to the sections, so the toggle sits in the free top-left corner. */
-@media (max-width: 767px) {
-  .sound {
-    top: 0;
-    bottom: auto;
-    left: var(--gutter);
-    right: auto;
-    height: var(--chrome-h);
-    font-size: 11px;
-    letter-spacing: 0.12em;
-  }
-}
-
-@media (max-width: 479px) {
-  .top {
-    gap: 6px;
-  }
-  .langCompact {
-    font-size: 11px;
-  }
-  .lang {
-    min-width: 26px;
-  }
-  .indexButton {
-    font-size: 12px;
-    letter-spacing: 0.14em;
-  }
-}
 
 /* Full-screen index */
 .panel {
@@ -169,6 +259,38 @@
   padding: 0;
 }
 
+.panel[data-open="true"] .list li {
+  animation: itemIn 620ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 45ms + 60ms);
+}
+@keyframes itemIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+.label {
+  display: inline-block;
+  transition: transform 320ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .link:hover .label {
+    transform: translateX(10px);
+  }
+}
+.previewItem img {
+  transition: transform 900ms var(--ease-out);
+  transform: scale(1.06);
+}
+.previewItem[data-active="true"] img {
+  transform: scale(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel[data-open="true"] .list li {
+    animation: none;
+  }
+}
+
 .link {
   position: relative;
   display: grid;
@@ -187,6 +309,7 @@
 }
 
 .label {
+  display: inline-block;
   font-family: var(--display);
   font-weight: 700;
   font-size: clamp(1.6rem, 1.1rem + 2.6vw, 3.6rem);
@@ -275,5 +398,52 @@
     max-height: 66vh;
     justify-self: end;
     width: min(100%, 52vh);
+  }
+}
+
+
+/* Phones: sound on the left; languages and MENU [+] on the right — text and hairlines, no plates */
+@media (max-width: 767px) {
+  .top {
+    padding-inline: var(--gutter);
+  }
+  .group {
+    flex: 1;
+    gap: 10px;
+  }
+  .group > .sound {
+    margin-right: auto;
+  }
+  .group > .sep:first-of-type {
+    display: none;
+  }
+  .sound {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    gap: 8px;
+  }
+  .indexButton {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    gap: 0.5em;
+  }
+}
+@media (max-width: 379px) {
+  .sound {
+    letter-spacing: 0.04em;
+    gap: 6px;
+  }
+  .group {
+    gap: 4px;
+  }
+  .lang {
+    min-width: 24px;
+  }
+  .langSep {
+    padding-inline: 0;
+  }
+  .indexButton {
+    letter-spacing: 0.08em;
+    padding-inline: 2px;
   }
 }

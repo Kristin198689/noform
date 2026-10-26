@@ -12,4 +12,13 @@ ScrollTrigger.config({ ignoreMobileResize: true });
 export const MOTION_OK = "(prefers-reduced-motion: no-preference)";
 export const REDUCED = "(prefers-reduced-motion: reduce)";
 
+/**
+ * Re-measure every scene in page order. Pins created late (e.g. after fonts change a scene's size)
+ * would otherwise be measured before the scenes below them, shifting every later trigger.
+ */
+export function refreshInOrder(): void {
+  ScrollTrigger.sort();
+  ScrollTrigger.refresh();
+}
+
 export { gsap, ScrollTrigger, useGSAP };

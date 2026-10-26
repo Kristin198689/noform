@@ -1,5 +1,5 @@
 {
-  "nav.index": "INDEX",
+  "nav.index": "MENU",
   "nav.close": "CLOSE",
   "nav.hero": "Campaign",
   "nav.lookbook": "In motion",
@@ -77,9 +77,11 @@
   "legal.privacy": "Privacy",
   "alt.hero": "Close-up of a model in a black hood and silver mirrored visor.",
   "alt.low": "Model in an oversized hoodie photographed from below.",
-  "alt.back": "Model in an oversized hoodie and cargo trousers, side view from a low angle, looking back over the shoulder.",
+  "alt.back": "Model seen from behind in an oversized washed hoodie, cap and wide cargo denim.",
   "alt.overhead": "Model looking up toward the camera from an overhead perspective.",
   "alt.crouch": "Model crouching in black streetwear.",
   "alt.stride": "Model taking a wide step in cargo trousers.",
-  "alt.visor": "Front portrait with a silver mirrored visor."
+  "alt.visor": "Front portrait with a silver mirrored visor.",
+  "tunnel.title": "INSIDE THE FORM.",
+  "lab.assembled": "YOUR FORM. YOUR RULES."
 }

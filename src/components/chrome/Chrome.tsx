@@ -26,7 +26,7 @@ export type ChromeStrings = Pick<
 const ITEMS: { id: string; key: keyof ChromeStrings; media?: MediaId }[] = [
   { id: "hero", key: "nav.hero", media: "hero" },
   { id: "lookbook", key: "nav.lookbook", media: "look-01" },
-  { id: "about", key: "nav.about", media: "look-02" },
+  { id: "about", key: "nav.about", media: "look-06" },
   { id: "visor", key: "nav.visor", media: "visor-front" },
   { id: "code", key: "nav.code", media: "look-03" },
   { id: "scanner", key: "nav.scanner", media: "look-04" },
@@ -35,7 +35,7 @@ const ITEMS: { id: string; key: keyof ChromeStrings; media?: MediaId }[] = [
 ];
 
 /** Section ids that belong to an index entry (pauses map to the section before them). */
-const SECTION_FOR: Record<string, string> = { reset: "hero", perspective: "about" };
+const SECTION_FOR: Record<string, string> = { reset: "hero", perspective: "about", inside: "code" };
 
 function LangSwitch({ locale, hash, className }: { locale: Locale; hash: string; className?: string }) {
   return (
@@ -62,9 +62,64 @@ export function Chrome({ locale, t }: { locale: Locale; t: ChromeStrings }) {
   const { soundOn, toggleSound, section } = useSite();
   const [open, setOpen] = useState(false);
   const [preview, setPreview] = useState<MediaId | undefined>(undefined);
+  const [hidden, setHidden] = useState(false);
+  const [theme, setTheme] = useState("photo");
   const trigger = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
+  const header = useRef<HTMLElement>(null);
+  // After an index jump the header stays put, so the reader keeps the controls.
+  const holdUntil = useRef(0);
   const current = SECTION_FOR[section] ?? section;
+
+  // Hide while reading downwards, return on the first upward scroll; always visible near the top,
+  // while the menu is open, or while a header control has keyboard focus.
+  useEffect(() => {
+    let lastY = window.scrollY;
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const y = window.scrollY;
+        const dy = y - lastY;
+        if (Math.abs(dy) < 6) return;
+        const focused = header.current?.contains(document.activeElement) ?? false;
+        const held = performance.now() < holdUntil.current;
+        setHidden(y > 120 && dy > 0 && !focused && !held);
+        lastY = y;
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  // Which surface is under the header line: light (gray pauses, lab), photo, or dark.
+  useEffect(() => {
+    let frame = 0;
+    const probe = () => {
+      frame = 0;
+      const x = window.innerWidth - 48;
+      const hit = document
+        .elementsFromPoint(x, 24)
+        .find((el) => !header.current?.contains(el) && el.closest("[data-theme], [data-section]"));
+      const surface = hit?.closest<HTMLElement>("[data-theme]");
+      setTheme(surface?.dataset.theme ?? "dark");
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(probe);
+    };
+    probe();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
 
   const close = useCallback((returnFocus = true) => {
     setOpen(false);
@@ -102,29 +157,38 @@ export function Chrome({ locale, t }: { locale: Locale; t: ChromeStrings }) {
 
   return (
     <>
-      <div className={styles.top}>
-        <LangSwitch locale={locale} hash={section} className={styles.langCompact} />
-        <button
-          ref={trigger}
-          type="button"
-          className={styles.indexButton}
-          aria-expanded={open}
-          aria-controls="site-index"
-          onClick={() => setOpen(true)}
-        >
-          {t["nav.index"]} <span aria-hidden="true">[ + ]</span>
-        </button>
-      </div>
-
-      <button
-        type="button"
-        className={styles.sound}
-        aria-pressed={soundOn}
-        onClick={toggleSound}
+      <header
+        ref={header}
+        className={styles.top}
+        data-theme={theme}
+        data-hidden={hidden && !open ? "true" : undefined}
+        onFocusCapture={() => setHidden(false)}
       >
-        <span className={styles.soundDot} data-on={soundOn} aria-hidden="true" />
-        {soundOn ? t["ui.soundOn"] : t["ui.soundOff"]}
-      </button>
+        <div className={styles.group}>
+          <button type="button" className={`${styles.sound}`} aria-pressed={soundOn} onClick={toggleSound}>
+            <span className={styles.soundDot} data-on={soundOn} aria-hidden="true" />
+            {soundOn ? t["ui.soundOn"] : t["ui.soundOff"]}
+          </button>
+          <span className={`${styles.sep}`} aria-hidden="true" />
+          <LangSwitch locale={locale} hash={section} className={`${styles.langCompact}`} />
+          <span className={`${styles.sep}`} aria-hidden="true" />
+          <button
+            ref={trigger}
+            type="button"
+            className={styles.indexButton}
+            aria-expanded={open}
+            aria-controls="site-index"
+            onClick={() => setOpen(true)}
+          >
+            <span>{t["nav.index"]}</span>
+            <span className={styles.bracket} aria-hidden="true">
+              <span>[</span>
+              <span className={styles.plus}>+</span>
+              <span>]</span>
+            </span>
+          </button>
+        </div>
+      </header>
 
       <div
         id="site-index"
@@ -146,12 +210,16 @@ export function Chrome({ locale, t }: { locale: Locale; t: ChromeStrings }) {
         <div className={styles.panelBody}>
           <ol className={styles.list}>
             {ITEMS.map((item, i) => (
-              <li key={item.id}>
+              <li key={item.id} style={{ "--i": i } as React.CSSProperties}>
                 <a
                   href={`#${item.id}`}
                   className={styles.link}
                   aria-current={current === item.id ? "location" : undefined}
-                  onClick={() => close(false)}
+                  onClick={() => {
+                    holdUntil.current = performance.now() + 900;
+                    setHidden(false);
+                    close(false);
+                  }}
                   onMouseEnter={() => setPreview(item.media)}
                   onFocus={() => setPreview(item.media)}
                 >

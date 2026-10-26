@@ -3,7 +3,11 @@
 import { useRef } from "react";
 import { Img } from "@/components/Img";
 import { gsap, MOTION_OK, useGSAP } from "@/lib/gsap";
+import { cue } from "@/lib/sound";
 import type { Messages } from "@/i18n/messages";
+import { VisorFloat } from "./VisorFloat";
+import { VisorFloatV1 } from "./VisorFloatV1";
+import { useVisorVariant } from "@/lib/useVisorVariant";
 import styles from "./Visor.module.css";
 
 type Strings = Pick<
@@ -38,6 +42,8 @@ const H_LINES = [77, 385, 695, 930];
 
 export function Visor({ t }: { t: Strings }) {
   const root = useRef<HTMLElement>(null);
+  // Temporary: ?visor=v1 renders the first implementation for side-by-side review.
+  const variant = useVisorVariant();
 
   useGSAP(
     () => {
@@ -53,6 +59,9 @@ export function Visor({ t }: { t: Strings }) {
         tl.from("[data-grid-v]", { scaleY: 0, duration: 1, ease: "power3.out", stagger: 0.08 })
           .from("[data-grid-h]", { scaleX: 0, duration: 1, ease: "power3.out", stagger: 0.08 }, 0.1)
           .from("[data-pointer-line]", { strokeDashoffset: 1, duration: 0.7, ease: "power2.out", stagger: 0.28 }, 0.5)
+          .add(() => cue("pulse"), 0.5)
+          .add(() => cue("pulse"), 0.78)
+          .add(() => cue("pulse"), 1.06)
           .from("[data-pointer-dot]", { scale: 0, transformOrigin: "50% 50%", duration: 0.35, stagger: 0.28 }, 0.5)
           .from("[data-pointer-label]", { opacity: 0, duration: 0.5, stagger: 0.28 }, 0.8)
           .from("[data-fade]", { opacity: 0, y: 10, duration: 0.8, ease: "power3.out", stagger: 0.08 }, 0.6);
@@ -64,7 +73,7 @@ export function Visor({ t }: { t: Strings }) {
 
   return (
     <section id="visor" data-section ref={root} className={styles.visor} aria-labelledby="visor-title">
-      <div className={styles.stage}>
+      <div className={styles.stage} data-theme="photo">
         <div className={styles.canvas} data-canvas>
           <Img id="visor-front" alt={t["alt.visor"]} sizes="(max-width: 767px) 170vw, 100vw" className={styles.photo} />
 
@@ -115,7 +124,7 @@ export function Visor({ t }: { t: Strings }) {
             <span className={`capsule ${styles.badge}`} data-fade>
               {t["visor.badge"]}
             </span>
-            <h2 id="visor-title" className={styles.title}>
+            <h2 id="visor-title" className={styles.title} data-split="chars">
               {t["visor.title"]}
             </h2>
             <p className={`micro ${styles.material}`} data-fade>
@@ -142,6 +151,7 @@ export function Visor({ t }: { t: Strings }) {
           <span className={styles.bottomRule} />
         </div>
       </div>
+      {variant === "v1" ? <VisorFloatV1 label={t["visor.title"]} /> : <VisorFloat label={t["visor.title"]} />}
     </section>
   );
 }

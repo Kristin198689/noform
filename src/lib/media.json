@@ -7,7 +7,8 @@
       480,
       960,
       1536
-    ]
+    ],
+    "lqip": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACQAwCdASoUAA0APvVmq04qpaQiMAgBUB6JaQAASqGzTFiC9u9AAP7sjmyvLG00BZ4kCckczW0f62yLUHoQV7taCgAAAA=="
   },
   "look-01": {
     "width": 1024,
@@ -17,9 +18,10 @@
       480,
       960,
       1024
-    ]
+    ],
+    "lqip": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAADQBACdASoUAB4APvVorE6qpiQiMAgBUB6JaQAAOQlk4PJXwOpnH57AHFWtw4TmAADo5dYOpKH7+LX68GZOerFw+80E2C6g84zEIGKOdWroQXMvsK8BF9eu70rWMyqq2mYPobM8yAAAAA=="
   },
-  "look-02": {
+  "look-06": {
     "width": 1024,
     "height": 1536,
     "alpha": false,
@@ -27,7 +29,8 @@
       480,
       960,
       1024
-    ]
+    ],
+    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAADwBACdASoUAB4APuVepU4pJSOiN/qoASAciWkAAFo7F3aI29vAOUYmWj50E/sbk4AA/lI0KPpOlo0cU5/T1jZ/b3fTWTuyWPX7ByjHM6l4L+iRwZAbWMZWnAAAAA=="
   },
   "look-03": {
     "width": 1024,
@@ -37,7 +40,8 @@
       480,
       960,
       1024
-    ]
+    ],
+    "lqip": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAADwBACdASoUAB4APvVusFCqpiSiqAqpUB6JaQAAJaaxQ/IvInnAt3zDr9G/M2xP4gAA3W+s8hkzaN1G3Gg1UXS0I0iGKaph3qrg1TRwqzwAjPUL7TtghA9zZR+p4QTRo1pZ5J2yoEW5CMEIwAA="
   },
   "look-04": {
     "width": 1536,
@@ -47,7 +51,8 @@
       480,
       960,
       1536
-    ]
+    ],
+    "lqip": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAwCdASoUAA0APvVkqk4qpaOiMAgBUB6JaQAAUTpZeKhnhDXmhAAA4Qs0O5Lvqcy6ynXF0wjdlgfVjqx/BG2BUsZrGiQAAAA="
   },
   "look-05": {
     "width": 1536,
@@ -57,7 +62,8 @@
       480,
       960,
       1536
-    ]
+    ],
+    "lqip": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAADQAwCdASoUAA0APvVmqk4qpaQiMAgBUB6JaQAAQ+REpsfZkuBa7AAA8bP4T/VUvGsID0i/EzWi2SMCmKv7lTULZ2AAAA=="
   },
   "visor-front": {
     "width": 1536,
@@ -67,7 +73,8 @@
       480,
       960,
       1536
-    ]
+    ],
+    "lqip": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAABwAwCdASoUAA0APvVmq04qpaQiMAgBUB6JaQAAUrhJFlJPtPAA/Arc1HUC+fcDu9jvuk1BetD3bgGzfCJrfhSDeAAAAA=="
   },
   "visor-01": {
     "width": 1536,
@@ -117,6 +124,36 @@
       480,
       960,
       1024
+    ]
+  },
+  "visor-float-01": {
+    "width": 1800,
+    "height": 1200,
+    "alpha": true,
+    "widths": [
+      480,
+      960,
+      1536
+    ]
+  },
+  "visor-float-02": {
+    "width": 1800,
+    "height": 1200,
+    "alpha": true,
+    "widths": [
+      480,
+      960,
+      1536
+    ]
+  },
+  "visor-float-03": {
+    "width": 1800,
+    "height": 1200,
+    "alpha": true,
+    "widths": [
+      480,
+      960,
+      1536
     ]
   }
 }

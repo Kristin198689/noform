@@ -92,3 +92,24 @@
     width: 92vw;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .dot::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border: 1px solid var(--pink);
+    border-radius: 50%;
+    animation: ping 2.2s var(--ease-out) infinite;
+  }
+}
+@keyframes ping {
+  from {
+    transform: scale(0.4);
+    opacity: 1;
+  }
+  to {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}

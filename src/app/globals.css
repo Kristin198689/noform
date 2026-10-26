@@ -213,3 +213,29 @@ button {
 html.menu-open {
   overflow: hidden;
 }
+
+/* Decorative only: registration crosses breathe (pseudo-elements, so GSAP keeps the element transform) */
+@media (prefers-reduced-motion: no-preference) {
+  .cross::before {
+    animation: crossV 3.6s ease-in-out infinite alternate;
+  }
+  .cross::after {
+    animation: crossH 3.6s ease-in-out infinite alternate;
+  }
+}
+@keyframes crossV {
+  from {
+    transform: scaleY(0.55);
+  }
+}
+@keyframes crossH {
+  from {
+    transform: scaleX(0.55);
+  }
+}
+
+/* SplitText line masks: room for ascenders/descenders, so tight display line-heights never crop glyphs */
+.split-line-mask {
+  padding: 0.14em 0.06em;
+  margin: -0.14em -0.06em;
+}

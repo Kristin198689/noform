@@ -1,11 +1,14 @@
 import { notFound } from "next/navigation";
 import { Chrome } from "@/components/chrome/Chrome";
 import { SiteProvider } from "@/components/SiteProvider";
+import { ScenePreloader } from "@/components/ScenePreloader";
+import { MotionDirector } from "@/components/MotionDirector";
 import { Hero } from "@/components/sections/Hero";
 import { PauseA } from "@/components/sections/PauseA";
 import { Lookbook } from "@/components/sections/Lookbook";
 import { About } from "@/components/sections/About";
 import { PauseB } from "@/components/sections/PauseB";
+import { Tunnel } from "@/components/sections/Tunnel";
 import { Visor } from "@/components/sections/Visor";
 import { DesignCode } from "@/components/sections/DesignCode";
 import { Scanner } from "@/components/sections/Scanner";
@@ -94,6 +97,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             "alt.overhead",
           ])}
         />
+        <Tunnel t={pick(t, ["tunnel.title"])} />
         <Scanner
           locale={locale}
           t={pick(t, ["scanner.title", "scanner.word1", "scanner.word2", "scanner.word3", "scanner.statement", "scanner.scan"])}
@@ -111,6 +115,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             "lab.sleeve",
             "lab.silhouette",
             "lab.note",
+            "lab.assembled",
           ])}
         />
         <Finale
@@ -118,6 +123,8 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           t={pick(t, ["end.heading", "end.subtitle", "end.concept", "end.credit", "end.fiction", "ui.top", "legal.imprint", "legal.privacy"])}
         />
       </main>
+      <ScenePreloader />
+      <MotionDirector />
     </SiteProvider>
   );
 }

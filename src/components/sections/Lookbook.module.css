@@ -36,7 +36,7 @@
   position: absolute;
   top: 0;
   left: var(--gutter);
-  right: calc(var(--gutter) + 260px);
+  right: calc(var(--gutter) + 440px);
   height: var(--chrome-h);
   display: flex;
   align-items: center;
@@ -156,12 +156,41 @@
   background: var(--white);
 }
 
-.titleBlock {
+/* One bottom band with separate areas: title + description | instruction + indicator */
+.footer {
   position: absolute;
   left: var(--gutter);
-  bottom: clamp(32px, 7vh, 72px);
+  right: var(--gutter);
+  bottom: clamp(28px, 6vh, 64px);
   z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  column-gap: clamp(24px, 4vw, 72px);
+  row-gap: 18px;
   pointer-events: none;
+}
+.titleBlock {
+  min-width: 0;
+}
+.controls {
+  display: grid;
+  justify-items: end;
+  gap: 14px;
+  max-width: min(46vw, 520px);
+}
+.hint {
+  margin: 0;
+  color: var(--pink);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-align: right;
+  text-wrap: balance;
+}
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 .title {
   margin: 0;
@@ -169,32 +198,11 @@
 }
 .subtitle {
   margin: 0.9em 0 0;
+  max-width: 44em;
   letter-spacing: 0.22em;
 }
 
-.hint {
-  position: absolute;
-  left: 50%;
-  bottom: clamp(32px, 7vh, 72px);
-  translate: -50% 0;
-  z-index: 2;
-  margin: 0;
-  color: var(--pink);
-  font-size: 11px;
-  letter-spacing: 0.22em;
-  white-space: nowrap;
-  pointer-events: none;
-}
 
-.progress {
-  position: absolute;
-  right: calc(var(--gutter) + 150px);
-  bottom: clamp(36px, 7.4vh, 76px);
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
 .progress .micro {
   white-space: nowrap;
 }
@@ -248,31 +256,6 @@
 .lookbook[data-mode="list"] .caption {
   opacity: 1;
 }
-.lookbook[data-mode="list"] .titleBlock,
-.lookbook[data-mode="list"] .hint {
-  position: relative;
-  left: auto;
-  bottom: auto;
-  translate: none;
-  padding-inline: var(--gutter);
-}
-.lookbook[data-mode="list"] .hint {
-  margin-top: 16px;
-}
-.lookbook[data-mode="list"] .progress {
-  display: none;
-}
-
-@media (min-width: 768px) and (max-width: 1099px) {
-  .titleBlock {
-    bottom: 104px;
-  }
-  .hint {
-    left: var(--gutter);
-    translate: none;
-    bottom: 64px;
-  }
-}
 
 @media (max-width: 767px) {
   .bar {
@@ -295,9 +278,6 @@
   .item[data-shape="objectTall"] .media {
     width: 32vw;
   }
-  .titleBlock {
-    bottom: 92px;
-  }
   /* captions above the panel so they never meet the title block */
   .caption {
     top: auto;
@@ -306,34 +286,44 @@
   .capRule {
     display: none;
   }
-  .hint {
-    left: var(--gutter);
-    right: var(--gutter);
-    translate: none;
-    bottom: 60px;
-    white-space: normal;
-  }
-  .progress {
-    left: var(--gutter);
-    right: auto;
-    bottom: 28px;
-    gap: 14px;
-  }
   .track {
     width: 120px;
   }
 }
 
-/* list mode wins over the phone positioning above */
-.lookbook[data-mode="list"] .hint,
-.lookbook[data-mode="list"] .titleBlock {
-  left: auto;
-  right: auto;
-}
 .lookbook[data-mode="list"] .caption {
   position: static;
   margin-top: 14px;
 }
 .lookbook[data-mode="list"] .capRule {
   display: block;
+}
+
+/* Narrow widths: stack title, description, instruction, indicator in their own rows */
+@media (max-width: 899px) {
+  .footer {
+    grid-template-columns: 1fr;
+    bottom: 22px;
+    row-gap: 14px;
+  }
+  .controls {
+    justify-items: start;
+    max-width: none;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 16px;
+  }
+  .hint {
+    text-align: left;
+  }
+}
+.lookbook[data-mode="list"] .footer {
+  position: relative;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  padding-inline: var(--gutter);
+}
+.lookbook[data-mode="list"] .progress {
+  display: none;
 }

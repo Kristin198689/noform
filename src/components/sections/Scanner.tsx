@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { mediaSrc, type MediaId } from "@/components/Img";
 import media from "@/lib/media.json";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, refreshInOrder, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { cue } from "@/lib/sound";
 import { useMotionMode } from "@/lib/useMotionMode";
 import type { Messages } from "@/i18n/messages";
 import styles from "./Scanner.module.css";
@@ -51,6 +52,20 @@ export function Scanner({ t, locale }: { t: Strings; locale: string }) {
   const measureRefs = useRef<(SVGTextElement | null)[]>([]);
   const mode = useMotionMode();
   const percent = useRef<HTMLSpanElement>(null);
+  // SVG <image> cannot be lazy: only attach sources when the scene is close (see ScenePreloader).
+  const [near, setNear] = useState(false);
+  const [fillWidth, setFillWidth] = useState(960);
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const onNear = () => {
+      setFillWidth(window.innerWidth < 768 ? 480 : 960);
+      setNear(true);
+    };
+    if (el.dataset.near === "true") onNear();
+    el.addEventListener("scene:near", onNear, { once: true });
+    return () => el.removeEventListener("scene:near", onNear);
+  }, []);
   const meter = useRef<HTMLSpanElement>(null);
 
   // Fit each SVG to the real glyph box once the local fonts are ready (lengths differ per language).
@@ -65,7 +80,7 @@ export function Scanner({ t, locale }: { t: Strings; locale: string }) {
         return { x: b.x - 2, y: -FONT_SIZE * 0.735, w: b.width + 4, h: FONT_SIZE * 0.77 };
       });
       setBoxes(next);
-      requestAnimationFrame(() => ScrollTrigger.refresh());
+      requestAnimationFrame(() => refreshInOrder());
     });
     return () => {
       alive = false;
@@ -79,12 +94,19 @@ export function Scanner({ t, locale }: { t: Strings; locale: string }) {
       const wordEls = gsap.utils.toArray<SVGSVGElement>("[data-word]");
       const line = root.current.querySelector<HTMLElement>("[data-scanline]");
       const block = root.current.querySelector<HTMLElement>("[data-words]");
-      if (!line || !block) return;
+      const frame = root.current.querySelector<HTMLElement>("[data-frame]");
+      if (!line || !block || !frame) return;
 
+      // a soft pass each time the line enters a word (both directions, never per pixel)
+      const inside: boolean[] = [];
       const apply = (p: number) => {
+        // Desktop: the words fill the frame, the line sweeps them. Phones: the words are a band,
+        // so the line crosses the whole frame (grid, coordinates, words) and nothing sits idle.
+        const frameRect = frame.getBoundingClientRect();
         const blockRect = block.getBoundingClientRect();
-        const lineY = blockRect.top + p * blockRect.height;
-        line.style.transform = `translateY(${(p * blockRect.height).toFixed(1)}px)`;
+        const phone = window.innerWidth < 768;
+        const lineY = phone ? frameRect.top + p * frameRect.height : blockRect.top + p * blockRect.height;
+        line.style.transform = `translateY(${(lineY - frameRect.top).toFixed(1)}px)`;
         wordEls.forEach((svg, i) => {
           const box = boxes[i];
           if (!box) return;
@@ -96,6 +118,9 @@ export function Scanner({ t, locale }: { t: Strings; locale: string }) {
           const top = box.y - PAD;
           const h = Math.max(0, Math.min(box.h + PAD * 2, local - top));
           svg.querySelector("[data-scan-rect]")?.setAttribute("height", h.toFixed(2));
+          const within = h > 0 && h < box.h + PAD * 2;
+          if (within && !inside[i] && mode !== "list") cue("sweep");
+          inside[i] = within;
           svg.querySelector("[data-flash]")?.setAttribute("y", (local - 1.6).toFixed(2));
           svg.querySelector("[data-photo]")?.setAttribute("transform", `translate(0 ${(-p * 6).toFixed(2)})`);
         });
@@ -110,6 +135,28 @@ export function Scanner({ t, locale }: { t: Strings; locale: string }) {
       }
 
       apply(0);
+      gsap.fromTo(
+        root.current.querySelectorAll("[data-outline]"),
+        { strokeDasharray: "0 6000" },
+        {
+          strokeDasharray: "6000 0",
+          ease: "none",
+          stagger: 0.12,
+          // drawn by the scroll as the section rises in right after the tunnel
+          scrollTrigger: { trigger: root.current, start: "top bottom", end: "top 25%", scrub: 0.6 },
+        },
+      );
+      wordEls.forEach((svg, i) =>
+        gsap.fromTo(
+          svg,
+          { xPercent: i % 2 ? 3 : -3 },
+          {
+            xPercent: i % 2 ? -3 : 3,
+            ease: "none",
+            scrollTrigger: { trigger: root.current, start: "top top", end: () => `+=${window.innerHeight * 1.2}`, scrub: true },
+          },
+        ),
+      );
       ScrollTrigger.create({
         trigger: root.current,
         start: "top top",
@@ -120,6 +167,8 @@ export function Scanner({ t, locale }: { t: Strings; locale: string }) {
         onUpdate: (self) => apply(gsap.utils.clamp(0, 1, self.progress * 1.12 - 0.04)),
         onRefresh: (self) => apply(gsap.utils.clamp(0, 1, self.progress * 1.12 - 0.04)),
       });
+      // this pin may be rebuilt after the glyph boxes are measured: re-measure everything below it
+      requestAnimationFrame(refreshInOrder);
     },
     { scope: root, dependencies: [boxes, mode], revertOnUpdate: true },
   );
@@ -135,7 +184,7 @@ export function Scanner({ t, locale }: { t: Strings; locale: string }) {
       data-mode={mode}
       aria-labelledby="scanner-title"
     >
-      <div className={styles.frame}>
+      <div className={styles.frame} data-frame>
         <div className={styles.grid} aria-hidden="true" />
         <span className="cross" style={{ left: "var(--gutter)", top: "12%" }} aria-hidden="true" />
         <span className="cross" style={{ left: "50%", top: "8%" }} aria-hidden="true" />
@@ -187,7 +236,7 @@ export function Scanner({ t, locale }: { t: Strings; locale: string }) {
                   <g clipPath={`url(#${id}-scan)`}>
                     <image
                       data-photo
-                      href={mediaSrc(fill.media, 960)}
+                      href={near ? mediaSrc(fill.media, fillWidth) : undefined}
                       x={img.x}
                       y={img.y}
                       width={img.w}
@@ -204,6 +253,7 @@ export function Scanner({ t, locale }: { t: Strings; locale: string }) {
                   x="0"
                   y="0"
                   className={`${styles.glyphs} ${styles.outline}`}
+                  data-outline
                   fontSize={FONT_SIZE}
                 >
                   {word}
@@ -211,13 +261,19 @@ export function Scanner({ t, locale }: { t: Strings; locale: string }) {
               </svg>
             );
           })}
-          <span className={styles.scanline} data-scanline aria-hidden="true">
-            <span className={styles.scanTarget} />
-          </span>
         </div>
 
+        <span className={styles.scanline} data-scanline aria-hidden="true">
+          <span className={styles.scanTarget} />
+          <span className={`deco ${styles.scanY}`} data-no-auto>
+            Y / SCAN
+          </span>
+        </span>
+
         <div className={styles.foot}>
-          <p className={styles.statement}>{t["scanner.statement"]}</p>
+          <p className={styles.statement} data-split>
+            {t["scanner.statement"]}
+          </p>
           <p className={`micro ${styles.codes}`} aria-hidden="true">
             <span>{t["scanner.scan"]}</span>
             <span>SURFACE 001</span>

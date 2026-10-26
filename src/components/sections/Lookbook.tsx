@@ -41,7 +41,7 @@ const ITEMS: Item[] = [
   { key: "look03", shape: "tall", media: ["look-03"], alt: "alt.overhead", caption: "lookbook.frame", y: -6 },
   { key: "hoodie", shape: "objectTall", media: ["hoodie"], y: 5 },
   { key: "look04", shape: "wide", media: ["look-04"], alt: "alt.crouch", y: -3 },
-  { key: "look02", shape: "tall", media: ["look-02"], alt: "alt.back", y: 4 },
+  { key: "look02", shape: "tall", media: ["look-06"], alt: "alt.back", y: 4 },
   { key: "cargo", shape: "objectTall", media: ["cargo"], y: -5 },
   { key: "look05", shape: "wide", media: ["look-05"], alt: "alt.stride", y: 2 },
 ];
@@ -239,7 +239,7 @@ export function Lookbook({ t }: { t: Strings }) {
       aria-labelledby="lookbook-title"
     >
       <div className={styles.frame}>
-        <p className={styles.bgWord} aria-hidden="true">UNRESTRICTED</p>
+        <p className={styles.bgWord} data-drift-x="6" aria-hidden="true">UNRESTRICTED</p>
 
         <div className={styles.bar}>
           <p className="micro">{t["lookbook.section"]}</p>
@@ -293,30 +293,36 @@ export function Lookbook({ t }: { t: Strings }) {
           </div>
         </div>
 
-        <div className={styles.titleBlock}>
-          <h2 id="lookbook-title" className={`display ${styles.title}`}>{t["lookbook.title"]}</h2>
-          <p className={`micro ${styles.subtitle}`}>{t["lookbook.subtitle"]}</p>
-        </div>
+        <div className={styles.footer}>
+          <div className={styles.titleBlock}>
+            <h2 id="lookbook-title" className={`display ${styles.title}`} data-split="chars">
+              {t["lookbook.title"]}
+            </h2>
+            <p className={`micro ${styles.subtitle}`}>{t["lookbook.subtitle"]}</p>
+          </div>
 
-        <p id="lookbook-hint" className={`micro ${styles.hint}`}>
-          {mode === "ring" ? (
-            <>
-              {t["ui.scroll"]} <span aria-hidden="true">·</span> {t["ui.drag"]} <span aria-hidden="true">⟷</span>
-            </>
-          ) : (
-            <>
-              {t["ui.drag"]} <span aria-hidden="true">⟷</span>
-            </>
-          )}
-        </p>
+          <div className={styles.controls}>
+            <p id="lookbook-hint" className={`micro ${styles.hint}`}>
+              {mode === "ring" ? (
+                <>
+                  {t["ui.scroll"]} <span aria-hidden="true">·</span> {t["ui.drag"]} <span aria-hidden="true">⟷</span>
+                </>
+              ) : (
+                <>
+                  {t["ui.drag"]} <span aria-hidden="true">⟷</span>
+                </>
+              )}
+            </p>
 
-        <div className={styles.progress} aria-hidden="true">
-          <span className={styles.track}>
-            <span ref={progressBar} className={styles.fill} />
-          </span>
-          <span className="micro">
-            <span ref={counter} className="pink">01</span> — {String(N).padStart(2, "0")}
-          </span>
+            <div className={styles.progress} aria-hidden="true">
+              <span className={styles.track}>
+                <span ref={progressBar} className={styles.fill} />
+              </span>
+              <span className="micro">
+                <span ref={counter} className="pink">01</span> — {String(N).padStart(2, "0")}
+              </span>
+            </div>
+          </div>
         </div>
         <p ref={live} className="sr-only" aria-live="polite" />
       </div>

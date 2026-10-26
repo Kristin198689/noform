@@ -1,5 +1,5 @@
 {
-  "nav.index": "INDEX",
+  "nav.index": "MENÜ",
   "nav.close": "SCHLIESSEN",
   "nav.hero": "Kampagne",
   "nav.lookbook": "In Bewegung",
@@ -77,9 +77,11 @@
   "legal.privacy": "Datenschutz",
   "alt.hero": "Nahaufnahme eines Models mit schwarzer Kapuze und silbernem Spiegelvisor.",
   "alt.low": "Model im Oversize-Hoodie, aus tiefer Perspektive fotografiert.",
-  "alt.back": "Model in Oversize-Hoodie und Cargo-Hose, Seitenansicht aus tiefer Perspektive, Blick über die Schulter.",
+  "alt.back": "Model von hinten in verwaschenem Oversize-Hoodie, Cap und weiter Cargo-Jeans.",
   "alt.overhead": "Model blickt aus der Vogelperspektive zur Kamera hoch.",
   "alt.crouch": "Model in schwarzer Streetwear in einer tiefen Hocke.",
   "alt.stride": "Model macht einen großen Schritt in einer Cargo-Hose.",
-  "alt.visor": "Frontales Porträt mit silbernem Spiegelvisor."
+  "alt.visor": "Frontales Porträt mit silbernem Spiegelvisor.",
+  "tunnel.title": "IN DER FORM.",
+  "lab.assembled": "DEINE FORM. DEINE REGELN."
 }
